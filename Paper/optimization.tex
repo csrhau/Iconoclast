@@ -1,0 +1,21 @@
+\section{Power Optimization}
+
+Having shown that 
+
+\todo{Decompose the model - find baseline vs non-baseline components}
+\todo{This kind of shows us that the baseline dominates}
+
+
+\fragment{Put another way, any optimization which trades runtime for power has a limited window of}
+
+
+\todo{equationify fact that energy is power * time, and assume we have power decreases, time static or increases}
+\todo{equationify baseline lt optimized lt unoptimized lt roofline} \todo{note - roofline is tdp max}
+
+\todo{Do maths think - by what margin would power have to go down to justify longer runtime? ratio of cost per watt, amortized cost per second}
+
+Nothing discussed so far precludes power optimization in practice.
+\todo{imply limits thus far are theoretical}
+Even these tight limits may still admit some benefits at extreme scale.
+Our final argument however is strictly economic.
+\reword{A great deal of attention is paid to the fact that power costs are approaching parity with machine construction costs.} The \choice{implicit, unspoken} \choice{consequence, corollary, implication} being that this has not yet happened. \todo{Ultimate point being here the price difference, machine vs power cost places a further limit on optimization utility. Even if we manage to find a slower, more power efficient method of computing a given result, the cost of energy saved has to be less than the added amortized runtime cost.}

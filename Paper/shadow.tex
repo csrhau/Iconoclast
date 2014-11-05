@@ -1,0 +1,51 @@
+\section{Shadow}
+
+\todo{\begin{enumerate}
+\item Merge this delta section - use for snippets
+\item Consider a background section
+\item Consider moving Code optimization out of intro
+\item Write up power equations
+\item Find recent source for percentage amount $P_{dyn}$
+\item Are we limited to $P_{dyn}$?Think so
+\item Optimizable range is only a small part of this part
+\item Write a clear limitations section
+
+\end{enumerate}
+}
+
+\begin{equation}
+P_{tot} = P_{dyn} + P_{leak} + P_{other}
+\end{equation}
+\begin{equation}
+P_{dyn} \propto CV^{2}Af
+\end{equation}
+\begin{equation}
+P_{leak} \propto V\left(ke^{\frac{-qV_{th}}{ak_{a}T}}\right)
+\end{equation}
+
+Where C denotes load capacitance, V the supply voltage, A the activity factor and f the clock frequency.
+
+
+
+Architectural power reduction techniques focus on decreasing each of these terms.
+For the purposes of software optimizations, however, we are limited to the dynamic power term, $P_{dyn}$, as this 
+
+\reword{Common power reduction techniques
+are based on architectural, logic or circuit design methods, decreasing f , AFi,
+N or Vi [Zang et al. 2000; Hsieh and Pedram 2000; Shang et al. 2002]. TAKEN FROM Timing-Aware Power-Optimal Ordering of Signals}
+
+
+
+\todo{Check this when book arrives}
+
+
+\todo{STOLEN:
+S. Kaxiras and M. Martonosi, Computer Architecture Techniques for Power-Efficiency, 1st ed. Morgan and
+Claypool Publishers, 2008.
+
+The end of Dennard scaling is expected to shrink the range of DVFS in future nodes, limiting the energy savings of this technique. This paper evaluates how much we can increase the effectiveness of DVFS by using a software decoupled access-execute approach. Decoupling the data access from execution allows us to apply optimal voltage-frequency selection for each phase and therefore improve energy efficiency over standard coupled execution.
+}
+\todo{Cite this paper for dennard: A 30 Year Retrospective on Dennard's MOSFET Scaling Paper}
+
+\reword{Dennard scaling, which roughly, that as transistors get smaller their power density stays constant, so that the power use stays in proportion with area: both voltage and current scale (downward) with length \todo{cite Dennard's paper}}
+

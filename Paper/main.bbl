@@ -1,10 +1,26 @@
 \begin{thebibliography}{1}
 
-\bibitem{huang:2009aa}
-S.~Huang, S.~Xiao, and W.~Feng.
-\newblock On the energy efficiency of graphics processing units for scientific
-  computing.
-\newblock In {\em Parallel Distributed Processing, 2009. IPDPS 2009. IEEE
-  International Symposium on}, pages 1--8, May 2009.
+\bibitem{kurd:2014aa}
+Nasser Kurd, Muntaquim Chowdhury, Edward Burton, Thomas~P Thomas, Christopher
+  Mozak, Brent Boswell, Manoj Lal, Anant Deval, Jonathan Douglas, Mahmoud
+  Elassal, et~al.
+\newblock 5.9 haswell: A family of ia 22nm processors.
+\newblock In {\em Solid-State Circuits Conference Digest of Technical Papers
+  (ISSCC), 2014 IEEE International}, pages 112--113. IEEE, 2014.
+
+\bibitem{shalf:2011aa}
+John Shalf, Sudip Dosanjh, and John Morrison.
+\newblock Exascale computing technology challenges.
+\newblock In Jos{\'e}M.LaginhaM. Palma, Michel Dayd{\'e}, Osni Marques, and
+  Jo{\~a}oCorreia Lopes, editors, {\em High Performance Computing for
+  Computational Science -- VECPAR 2010}, volume 6449 of {\em Lecture Notes in
+  Computer Science}, pages 1--25. Springer Berlin Heidelberg, 2011.
+
+\bibitem{shao:2013aa}
+Y.S. Shao and D.~Brooks.
+\newblock Energy characterization and instruction-level energy model of intel's
+  xeon phi processor.
+\newblock In {\em Low Power Electronics and Design (ISLPED), 2013 IEEE
+  International Symposium on}, pages 389--394, Sept 2013.
 
 \end{thebibliography}

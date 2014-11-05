@@ -1,0 +1,2 @@
+mkdir $HOSTNAME
+for i in *.out; do egrep 'Real Time:|Sys Time:|User Time:|PKG Energy:|PP0 Energy:|PKG Power:' $i > $HOSTNAME/$i; done

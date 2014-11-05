@@ -1,0 +1,46 @@
+\documentclass[a4paper]{article}
+\usepackage{url} 
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[parfill]{parskip}
+\usepackage{pgfplots}
+\usetikzlibrary{external}
+\tikzset{external/system call={lualatex \tikzexternalcheckshellescape 
+         -enable-write18 -halt-on-error -interaction=nonstopmode 
+         -jobname "\image" "\texsource"}}
+\tikzexternalize % activate!
+\begin{document}
+\begin{figure}[ht]
+ 
+\begin{tikzpicture}
+  \begin{axis}[no markers, xlabel={Time \emph{(s)}}, ylabel={CPU Power \emph{(W)}}, axis on top,
+    ymin=0,ymax=25, 
+    width=\textwidth,
+    height=5cm,
+    legend style={at={(0.5,-0.4)}, anchor=north,legend columns=-1, /tikz/every even column/.append style={column sep=0.5cm}}
+    ]
+      %Specify Highlight bins, the boundaries of which are at samples:
+      %68 165 195 635 740 1195 1290 1770 1875 2335 2445 2926 3025
+
+     % SSR was 64000000 cycles/sample
+     % 64000000 / 3200000000 = 0.02
+     \addplot table [col sep=comma,trim cells=true,x expr=\coordindex*0.02, y expr=\thisrowno{0}/0.02] {./Data/3.20GHz.csv};
+     
+     % 64000000 / 2700000000 = 0.0237037037
+     \addplot table [col sep=comma,trim cells=true,x expr=\coordindex*0.0237037037, y expr=\thisrowno{0}/0.0237037037] {./Data/2.70GHz.csv};
+    
+    % 64000000 / 2100000000 = 0.03047619047
+    \addplot table [col sep=comma,trim cells=true,x expr=\coordindex*0.03047619047, y expr=\thisrowno{0}/0.03047619047] {./Data/2.10GHz.csv};
+    
+    % 64000000 / 1600000000 = 0.04
+    \addplot table [col sep=comma,trim cells=true,x expr=\coordindex*0.04, y expr=\thisrowno{0}/0.04] {./Data/1.60GHz.csv};
+     
+    \addlegendentry{3.2GHz}
+    \addlegendentry{2.7GHz}
+    \addlegendentry{2.1GHz}
+    \addlegendentry{1.6GHz}
+  \end{axis}
+\end{tikzpicture}
+
+\end{figure}
+\end{document}
