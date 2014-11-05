@@ -1,0 +1,8 @@
+# Latex artifacts
+*.aux
+*.bbl
+*.auxlock
+*.dep
+*.dpth
+*.log
+

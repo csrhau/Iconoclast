@@ -23,9 +23,6 @@
 *.hex
 *.x
 
-# Latex artifacts
-*.aux
-*.bbl
-*.auxlock
-*.dep
-*.dpth
+
+#vim cruft
+*.swp
