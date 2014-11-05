@@ -22,3 +22,10 @@
 *.x86_64
 *.hex
 *.x
+
+# Latex artifacts
+*.aux
+*.bbl
+*.auxlock
+*.dep
+*.dpth

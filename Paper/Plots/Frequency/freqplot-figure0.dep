@@ -1,4 +1,0 @@
-freqplot-figure0.pdf: ./Data/3.20GHz.csv
-freqplot-figure0.pdf: ./Data/2.70GHz.csv
-freqplot-figure0.pdf: ./Data/2.10GHz.csv
-freqplot-figure0.pdf: ./Data/1.60GHz.csv
