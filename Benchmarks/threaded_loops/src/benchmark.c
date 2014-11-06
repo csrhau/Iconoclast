@@ -7,6 +7,7 @@
 static void * nop_benchmark(void * args) {
 //  asm volatile 
   while(1) {}
+  return NULL;
 }
 
 void run_benchmark(int threads, enum BENCHMARK benchmark) {
