@@ -6,7 +6,7 @@
 #include "benchmark.h"
 
 // Command line options
-#define OPTSTRING "vi:"
+#define OPTSTRING "vt:"
 static struct option long_opts[] = {
   {"threads", optional_argument, NULL, 'i'},
   {"verbose",   optional_argument, NULL, 'v'}
@@ -50,5 +50,6 @@ int main(int argc, char *argv[]) {
   // Print out settings
   printf("%s invoked. Settings:\n", argv[0]);
   printf("\tThreads %d\n\tVerbose: %d\n", args.threads, args.verbose);
+  run_benchmark(args.threads, NOP);
   return 0;
 }

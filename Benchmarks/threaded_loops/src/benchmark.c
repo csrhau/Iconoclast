@@ -5,8 +5,13 @@
 #include "benchmark.h"
 
 static void * nop_benchmark(void * args) {
-//  asm volatile 
-  while(1) {}
+  asm(".intel_syntax noprefix");
+  asm volatile("top:    ; \
+                nop     ; \
+                nop     ; \
+                nop     ; \
+                jmp top ");
+  asm(".att_syntax prefix");
   return NULL;
 }
 
