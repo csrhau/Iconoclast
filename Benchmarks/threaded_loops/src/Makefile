@@ -1,4 +1,4 @@
-PRODUCT := idsniff
+PRODUCT := lbench
 BUILDDIR := ../build
 
 HDRS := $(wildcard ./*.h)

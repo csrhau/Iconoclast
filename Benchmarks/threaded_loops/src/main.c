@@ -3,7 +3,7 @@
 #include <string.h>
 #include <getopt.h>
 
-#include "benchmark.c"
+#include "benchmark.h"
 
 // Command line options
 #define OPTSTRING "vi:"
@@ -26,7 +26,7 @@ void print_usage(char *progname) {
 
 int main(int argc, char *argv[]) {
   // Parse command line arguments
-  struct arguments args = {"eth0", 0}; // Default values
+  struct arguments args = {1, 0}; // Default values
   int optc;
   while ((optc = getopt_long(argc, argv, OPTSTRING, long_opts, NULL)) != EOF) {
     switch (optc) {
