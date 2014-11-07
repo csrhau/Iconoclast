@@ -1,6 +1,8 @@
 # Latex artifacts
 *.aux
 *.bbl
+*.blg
+*.synctex.gz
 *.auxlock
 *.dep
 *.dpth
