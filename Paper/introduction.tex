@@ -3,15 +3,6 @@ Driven by Moore's Law, advances in processor design have delivered improvements 
 
 Hardware manufacturers are already prioritising energy efficiency in their processor designs~\cite{kurd:2014aa}. In turn, some groups have suggested that software modifications will be required to fully exploit the energy efficiency improvements of modern processors~\cite{shao:2013aa}. This is analogous to the current practice of tuning code for reduced runtime by exploiting specific processor features like vectorisation or cache hierarchy. These groups expect targeted optimisation to be applied to reducing power consumption in the future.
 
-Code optimisation is a complex task during which developers typically rely on the support of a range tools and techniques including profilers and performance models. Up until now the overarching goal of performance engineers has been to minimize run time. The tools which have emerged over the years have therefore focussed on a specific class of optimization - namely code transformations which speed up execution. An expanded tool set will be required if the kind of multi-objective optimization necessary to encompass both power and runtime is to become commonplace.
+A body of research is accumulating as the search for techniques to identify and reason about software power optimizations continues. The intent of this paper is to provide a critical review of the field; identifying the opportunities present and highlighting the amount of benefit which can be realistically expected of them. We approach this task in two ways. Firstly we review the prior art in this field to identify any trends and secondly we provide an empirical investigation, applying some of the proposed techniques in order to understand how they may benefit developers.
 
-A body of research is accumulating as the search for techniques to identify and reason about software power optimizations continues.
-\todo{Paragraph stating that work has commenced building up techniques to do this. Note a lot will be covered in prior art.
-
-\begin{itemize}
-\item Measurement vs modelling
-\item Power is the integral and hard to measure
-\end{itemize}
-}
-
-The remainder of this paper is organized as follows. Section~\ref{sec:prior} gives an overview of prior research carried out in this area. Section~\ref{sec:profiling} then provides a commentary about how the techniques described in Section~\ref{sec:prior} may be applied practically.
+The remainder of this paper is organized as follows: Section~\ref{sec:background} details the problem background and introduces some core concepts and metrics. Section~\ref{sec:prior} gives an overview of prior research carried out in this area. Section~\ref{sec:profiling} then investigates how the techniques described in Section~\ref{sec:prior} may be applied practically.\todo{finish, condense}

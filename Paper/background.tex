@@ -1,0 +1,31 @@
+\section{Background}
+\label{sec:background}
+Despite recent interest, concerns about system power have existed since the dawn of computing. Some of the earliest valve-based computers had power draws comparable to modern supercomputers. The ENIAC machine dissipated 174 kW \cite{todo, book 29/59}, a figure which would not look out of place in the current Top 500 list, despite the fact this machine dates from 1947.
+
+Bipolar semiconductor technologies superseded thermionic valves in the 1950s and 60s, leading to dramatic reduction in power consumption. Over time, manufacturing improvements led to smaller transistors and in turn an exponential increase in both performance and power density. Ultimately this resulted in chips which strained the limits of cooling technologies.
+
+The use of bipolar semiconductors peaked in the early 1990s when they were replaced in turn with the Complementary Metal Oxide Semiconductor (CMOS) technology we still rely on today. CMOS was already mature before this point, however it had been viewed as too slow to be of use in high-performance microprocessors.
+
+\todo{Bosh in plot from pp2}
+
+\todo{Dennard scaling?}
+
+This pattern of improving hardware until physical limits force designers to switch to novel technologies appears to be repeating itself now. Unfortunately, unlike last time we do not have a new semiconductor technology waiting in the wings. To compound this problem, supercomputing is \reword{ever-increasingly} central to scientific progress. This is motivating researchers from a broad range of fields to try to find alternative ways to combat the rise of power consumption and ensure we can continue to benefit from technology scaling in the short to medium term whilst we wait for the next technology shift.
+
+\todo{Disregarding the emergence of new fundamental technologies means we have to find new ways to squeeze extra performance out of what we have. System architects are focussing on chip design already. Software engineers are starting to try to find ways of following suit.}
+
+\todo{Before we can reduce software power consumption, we must understand its sources and how we measure it}
+\todo{The power equations}
+\todo{tdp tdp squared etc}
+\todo{Linking paragraph, saying now we have metrics we can hope to improve on them}
+
+Code optimisation is a complex task during which developers typically rely on the support of a range tools and techniques including profilers and performance models. Up until now the overarching goal of performance engineers has been to minimize run time. The tools which have emerged over the years have therefore focussed on a specific class of optimization - namely code transformations which speed up execution. An expanded tool set will be required if the kind of multi-objective optimization necessary to encompass both power and runtime is to become commonplace.
+
+A body of research is accumulating as the search for techniques to identify and reason about software power optimizations continues.
+\todo{Paragraph stating that work has commenced building up techniques to do this. Note a lot will be covered in prior art.
+
+\begin{itemize}
+\item Measurement vs modelling
+\item Power is the integral and hard to measure
+\end{itemize}
+}
