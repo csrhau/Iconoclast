@@ -6,6 +6,7 @@
 \setlength{\parskip}{0pt}
 \setlength{\parindent}{15pt} 
 \usepackage{multirow}
+\usepackage{amsfonts}
 \usepackage{mathtools}
 
 \title{Software Optimizations for Reduced Energy Consumption: A Feasibility Study}                            
@@ -18,6 +19,9 @@ The University of Warwick}
 \date{}
 \hyphenation{scaling}
 
+\newcommand{\golden}{}
+\renewcommand{\golden}{{\color{green} \checkmark}}
+
 
 \newcommand{\todo}[1]{}
 \renewcommand{\todo}[1]{{\color{red} TODO: {#1}}} % comment me out for prod
@@ -29,7 +33,7 @@ The University of Warwick}
 \renewcommand{\fragment}[1]{{\color{green}<fragment>}{#1}{\color{green}</fragment>}} %
 
 \makeatletter
-\newcommand{\choice}[2][, ]{{\color{Purple}\{%
+\newcommand{\choice}[2][ |]{{\color{Purple}\{%
   \def\nextitem{\def\nextitem{#1}}%
   \@for \el:=#2\do{\nextitem\el}%
 \}}}

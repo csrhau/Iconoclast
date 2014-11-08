@@ -1,23 +1,62 @@
 \section{Background}
 \label{sec:background}
-Despite recent interest, concerns about system power have existed since the dawn of computing. Some of the earliest valve-based computers had power draws comparable to modern supercomputers. The ENIAC machine dissipated 174 kW \cite{todo, book 29/59}, a figure which would not look out of place in the current Top 500 list, despite the fact this machine dates from 1947.
+Despite recent interest, concerns about system power have existed since the dawn of computing. Some of the earliest valve-based computers had power draws comparable to modern supercomputers. The ENIAC machine dissipated 174 kW \cite{birnbaum:2000aa}, a figure which would not look out of place in the current Top 500 list, despite the fact this machine dates from 1947.\golden
 
-Bipolar semiconductor technologies superseded thermionic valves in the 1950s and 60s, leading to dramatic reduction in power consumption. Over time, manufacturing improvements led to smaller transistors and in turn an exponential increase in both performance and power density. Ultimately this resulted in chips which strained the limits of cooling technologies.
+Bipolar semiconductor technologies superseded thermionic valves in the 1950s and 60s, leading to dramatic reduction in power consumption. Over time, manufacturing improvements led to smaller transistors and in turn an exponential increase in both performance and power density. Ultimately this resulted in chips which strained the limits of cooling technologies. \golden
 
-The use of bipolar semiconductors peaked in the early 1990s when they were replaced in turn with the Complementary Metal Oxide Semiconductor (CMOS) technology we still rely on today. CMOS was already mature before this point, however it had been viewed as too slow to be of use in high-performance microprocessors.
+The use of bipolar semiconductors peaked in the early 1990s when they were replaced in turn with the Complementary Metal Oxide Semiconductor (CMOS) technology we still rely on today. CMOS was already mature before this point, however it had been viewed as too slow to be of use in high-performance microprocessors. \golden
 
-\todo{Bosh in plot from pp2}
+\todo{Bosh in plot from book pp2?}
 
 \todo{Dennard scaling?}
 
-This pattern of improving hardware until physical limits force designers to switch to novel technologies appears to be repeating itself now. Unfortunately, unlike last time we do not have a new semiconductor technology waiting in the wings. To compound this problem, supercomputing is \reword{ever-increasingly} central to scientific progress. This is motivating researchers from a broad range of fields to try to find alternative ways to combat the rise of power consumption and ensure we can continue to benefit from technology scaling in the short to medium term whilst we wait for the next technology shift.
+This pattern of improving hardware until physical limits forces a switch to novel technologies is a recurring one. The previous iteration saw the widespread adoption of multi-core architectures, and once again we find ourselves struggling with the limitations of current hardware. Unfortunately this time we lack a mature semiconductor technology or architectural paradigm waiting in the wings. Researchers are therefore searching for alternative ways to combat the rise of power consumption and ensure continued benefit from technology scaling whilst we await the emergence of the next fundamental shift in processor technology. \golden
 
-\todo{Disregarding the emergence of new fundamental technologies means we have to find new ways to squeeze extra performance out of what we have. System architects are focussing on chip design already. Software engineers are starting to try to find ways of following suit.}
+
+\todo{\choice{Disregarding, setting aside, Until} the emergence of new fundamental technologies means we have to find new ways to squeeze extra performance out of what we have. System architects are already focussing on chip design \todo{Something about dark silicon?}. Software engineers are starting to try to find ways of following suit.}
+
+Our investigation concerns software optimizations for scientific codes. We therefore limit ourselves to considering contemporary CMOS chips with conventional architectures. The power draw of CMOS chips can be split into distinct components of which the most significant are dynamic power and leakage power, as summarized in equation \ref{eq:totpwr}.\golden
+
+\begin{equation}
+\label{eq:totpwr}
+P_{tot} = P_{dyn} + P_{leak} + P_{other}
+\end{equation}
+\begin{equation} 
+\label{eq:dynpwr}
+P_{dyn} \propto CV^{2}Af
+\end{equation}
+\begin{equation}
+\label{eq:leakpwr}
+P_{leak} \propto V\left(ke^{\frac{-qV_{th}}{ak_{a}T}}\right)
+\end{equation}
+
+\fragment{Traditionally, dynamic power has been the dominant source of power consumption. Simply put, dynamic power can be thought of as the power consumed when gates change state as the processor performs useful work. Equation~\ref{eq:dynpwr} 
+
+
+
+
+\todo{What dynamic power is}}
+
+\fragment{Where C denotes load capacitance, V the supply voltage, A the activity factor and f the clock frequency.}
+
+
+
+\todo { Find pmbs paper, how they segue into equations}
+
+
+
+
+
+
+
+ We specifically focus on processors from the
 
 \todo{Before we can reduce software power consumption, we must understand its sources and how we measure it}
 \todo{The power equations}
 \todo{tdp tdp squared etc}
 \todo{Linking paragraph, saying now we have metrics we can hope to improve on them}
+
+\todo{Any non-trivial optimization requires tooling support, and that's where we'll head. Say something like the amount we can hope to optimize by is bounded by the size of inefficiency we can detect, because it is fanciful to think we can fix problems we can't see.} 
 
 Code optimisation is a complex task during which developers typically rely on the support of a range tools and techniques including profilers and performance models. Up until now the overarching goal of performance engineers has been to minimize run time. The tools which have emerged over the years have therefore focussed on a specific class of optimization - namely code transformations which speed up execution. An expanded tool set will be required if the kind of multi-objective optimization necessary to encompass both power and runtime is to become commonplace.
 
