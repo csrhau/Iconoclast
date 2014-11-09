@@ -12,10 +12,12 @@ The use of bipolar semiconductors peaked in the early 1990s when they were repla
 
 This pattern of improving hardware until physical limits forces a switch to novel technologies is a recurring one. The previous iteration saw the widespread adoption of multi-core architectures, and once again we find ourselves struggling with the limitations of current hardware. Unfortunately this time we lack a mature semiconductor technology or architectural paradigm waiting in the wings. Researchers are therefore searching for alternative ways to combat the rise of power consumption and ensure continued benefit from technology scaling whilst we await the emergence of the next fundamental shift in processor technology. \golden
 
+System architects are already focussing on power efficient chip design with recent innovations in on-die voltage regulation \cite{burton:2014aa}, Dynamic Voltage and Frequency Scaling (DVFS) scheduling \cite{kwon:2013aa} and \todo{clock gating?}, amongst other areas.
 
-\todo{\choice{Disregarding, setting aside, Until} the emergence of new fundamental technologies means we have to find new ways to squeeze extra performance out of what we have. System architects are already focussing on chip design \todo{Something about dark silicon?}. Software engineers are starting to try to find ways of following suit.}
+\fragment{
+Performance engineers are also looking for ways to address power concerns. It is their efforts we hope to guide with this paper, and hence we constrain our focus to the interaction between software and power consumption for scientific codes. 
 
-Our investigation concerns software optimizations for scientific codes. We therefore limit ourselves to considering contemporary CMOS chips with conventional architectures. The power draw of CMOS chips can be split into distinct components of which the most significant are dynamic power and leakage power, as summarized in equation \ref{eq:totpwr}.\golden
+We therefore limit ourselves to considering contemporary CMOS chips with conventional architectures. The power draw of CMOS chips can be split into distinct components of which the most significant are dynamic power and leakage power, as summarized in Equation \ref{eq:totpwr}.}
 
 \begin{equation}
 \label{eq:totpwr}
@@ -30,14 +32,15 @@ P_{dyn} \propto CV^{2}Af
 P_{leak} \propto V\left(ke^{\frac{-qV_{th}}{ak_{a}T}}\right)
 \end{equation}
 
-\fragment{Traditionally, dynamic power has been the dominant source of power consumption. Simply put, dynamic power can be thought of as the power consumed when gates change state as the processor performs useful work. Equation~\ref{eq:dynpwr} 
+Dynamic power can be thought of as the power consumed when logic gates change state as a processor performs work. Equation~\ref{eq:dynpwr} \todo{finish}
+here C denotes load capacitance, V the supply voltage, A the activity factor and f the clock frequency.
+
+
+\fragment{ Dynamic power has traditionally been the dominant source of power consumption}
 
 
 
-
-\todo{What dynamic power is}}
-
-\fragment{Where C denotes load capacitance, V the supply voltage, A the activity factor and f the clock frequency.}
+\fragment{W}
 
 
 
