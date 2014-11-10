@@ -5,6 +5,7 @@
 #include "benchmark.h"
 
 static void * nop_benchmark(void * args) {
+  printf("Foo bar baz boz\n");
   asm(".intel_syntax noprefix");
   asm volatile("top:    ; \
                 nop     ; \

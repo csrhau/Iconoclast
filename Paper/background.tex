@@ -8,16 +8,18 @@ The use of bipolar semiconductors peaked in the early 1990s when they were repla
 
 \todo{Bosh in plot from book pp2?}
 
-\todo{Dennard scaling?}
-
 This pattern of improving hardware until physical limits forces a switch to novel technologies is a recurring one. The previous iteration saw the widespread adoption of multi-core architectures, and once again we find ourselves struggling with the limitations of current hardware. Unfortunately this time we lack a mature semiconductor technology or architectural paradigm waiting in the wings. Researchers are therefore searching for alternative ways to combat the rise of power consumption and ensure continued benefit from technology scaling whilst we await the emergence of the next fundamental shift in processor technology. \golden
 
 System architects are already focussing on power efficient chip design with recent innovations in on-die voltage regulation \cite{burton:2014aa}, Dynamic Voltage and Frequency Scaling (DVFS) scheduling \cite{kwon:2013aa} and \todo{clock gating?}, amongst other areas.
 
-\fragment{
-Performance engineers are also looking for ways to address power concerns. It is their efforts we hope to guide with this paper, and hence we constrain our focus to the interaction between software and power consumption for scientific codes. 
+Performance engineers are also looking for ways to address power concerns. It is their efforts we hope to guide with this paper, and hence we constrain our focus to the interaction between software and power consumption for scientific codes. We therefore limit ourselves to considering contemporary CMOS chips with conventional architectures as these make up the majority of supercomputing systems.
 
-We therefore limit ourselves to considering contemporary CMOS chips with conventional architectures. The power draw of CMOS chips can be split into distinct components of which the most significant are dynamic power and leakage power, as summarized in Equation \ref{eq:totpwr}.}
+
+The power draw of CMOS chips can be split into distinct components, the most significant of which are dynamic power and leakage power. Dynamic power can be thought of as the power consumed when logic gates change state as a processor performs work. Leakage power dissipation stems from the fact that at very small scales the insulating properties of silicon break down, allowing some current to flow even when gates remain inactive.
+
+\todo{Dennard scaling here. Should cover why pLeak is going to dominate pDyn}
+
+
 
 \begin{equation}
 \label{eq:totpwr}
@@ -32,7 +34,7 @@ P_{dyn} \propto CV^{2}Af
 P_{leak} \propto V\left(ke^{\frac{-qV_{th}}{ak_{a}T}}\right)
 \end{equation}
 
-Dynamic power can be thought of as the power consumed when logic gates change state as a processor performs work. Equation~\ref{eq:dynpwr} \todo{finish}
+ Equation~\ref{eq:dynpwr} \todo{finish}
 here C denotes load capacitance, V the supply voltage, A the activity factor and f the clock frequency.
 
 
