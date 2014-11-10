@@ -1,0 +1,34 @@
+\documentclass[a4paper]{article}
+\usepackage{url} 
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[parfill]{parskip}
+\usepackage{pgfplots}
+\usetikzlibrary{external}
+\tikzset{external/system call={lualatex \tikzexternalcheckshellescape 
+         -enable-write18 -halt-on-error -interaction=nonstopmode 
+         -jobname "\image" "\texsource"}}
+\tikzexternalize % activate!
+\begin{document}
+\begin{figure}[ht]
+ 
+\begin{tikzpicture}
+  \begin{axis}[no markers, ylabel={Power \emph{(W)}}, xlabel={CPU Frequency \emph{(GHz)}}, axis on top,
+    ymin=0,
+    width=\textwidth,
+    height=5cm,
+    legend style={at={(0.5,-0.4)}, anchor=north,legend columns=-1, /tikz/every even column/.append style={column sep=0.5cm}}
+    ]
+      \addplot table [col sep=comma,trim cells=true,x expr=\thisrowno{0}, y expr=\thisrowno{1}] {./Data/digest.csv};
+      \addplot table [col sep=comma,trim cells=true,x expr=\thisrowno{0}, y expr=\thisrowno{2}] {./Data/digest.csv};
+      \addplot table [col sep=comma,trim cells=true,x expr=\thisrowno{0}, y expr=\thisrowno{3}] {./Data/digest.csv};
+      \addplot table [col sep=comma,trim cells=true,x expr=\thisrowno{0}, y expr=\thisrowno{4}] {./Data/digest.csv};
+      \addlegendentry{1 Core}
+      \addlegendentry{2 Cores}
+      \addlegendentry{3 Cores}
+      \addlegendentry{4 Cores}
+      \addlegendentry{Model}
+  \end{axis}
+\end{tikzpicture}
+\end{figure}
+\end{document}
