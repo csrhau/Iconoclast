@@ -32,12 +32,15 @@ Frequency (GHz) & 1 & 2 & 3 & 4 \\ \midrule
 
 \todo{Something about how any delta is about how the code uses more logic elements than our NOP loops. Our optimization window is therefore within that Delta}
 
-
+\todo{Be nice, say that this does not invalidate other work, but simply shows that hardware has now reached \reword{convergence} and basically there's little traction left}
 
 Having shown that 
 
 \fragment{This model is not supposed to be rigorous or precise. Rather we present it as the simplest possible non-trivial power model which accounts for the sources of variability in the power equations. In effect our model is functionally equivalent to the power equations
 presented previously with appropriate constants substituted \todo{sampled}. We present this model as our null hypothesis - for a model to be useful it must outperform this one. It is necessarily an oversimplification - it ignores clock gating. It should also consistently underestimate the true value, as the benchmark selected intentionally exercises the minimum possible number of logic elements while still performing work.}
+
+
+\todo{One limitation of this work stems from the nature of RAPL - it is an accumulative measurement of power taking into account all processes. On a loaded system it will measure all tasks }
 
 
 

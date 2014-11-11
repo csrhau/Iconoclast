@@ -5,9 +5,11 @@ Despite recent interest, concerns about system power have existed since the dawn
 Bipolar semiconductor technologies superseded thermionic valves in the 1950s and 60s, leading to dramatic reduction in power consumption. Over time, manufacturing improvements led to smaller transistors and in turn an exponential increase in both performance and power density. Ultimately this resulted in chips which strained the limits of cooling technologies. \golden
 
 The use of bipolar semiconductors peaked in the early 1990s when they were replaced in turn with the Complementary Metal Oxide Semiconductor (CMOS) technology we still rely on today. CMOS was already mature before this point, however it had been viewed as too slow to be of use in high-performance microprocessors. \golden
-
-\todo{Bosh in plot from book pp2?}
-
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.9\linewidth]{Images/bipolarcmos.jpg}
+\caption{Trends in module level power density, reproduced from \cite{chu:1999aa}. Copyright 1999 IEEE.}
+\end{figure}
 This pattern of improving hardware until physical limits forces a switch to novel technologies is a recurring one. The previous iteration saw the widespread adoption of multi-core architectures, and once again we find ourselves struggling with the limitations of current hardware. Unfortunately this time we lack a mature semiconductor technology or architectural paradigm waiting in the wings. Researchers are therefore searching for alternative ways to combat the rise of power consumption and ensure continued benefit from technology scaling whilst we await the emergence of the next fundamental shift in processor technology. \golden
 
 System architects are already focussing on power efficient chip design with recent innovations in on-die voltage regulation \cite{burton:2014aa}, Dynamic Voltage and Frequency Scaling (DVFS) scheduling \cite{kwon:2013aa} and \todo{clock gating?}, amongst other areas.
