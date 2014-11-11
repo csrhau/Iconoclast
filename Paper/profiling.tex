@@ -21,3 +21,64 @@ Baseline against which to compare the work of others.
 
 \fragment{Two components to our investigation. Firstly, the upper bound imposed by the baseline power consumption. Secondly, as we can only view power figures approximately, the error introduced into these models necessarily limits their usefulness as optimization tools beyond a certain point.}
 
+
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{@{}ccccc@{}} \toprule
+&\multicolumn{4}{c}{CPU Cores Active} \\ \cmidrule(r){2-5}
+Frequency (GHz) & 1 & 2 & 3 & 4 \\ \midrule 
+1.60 & 9.180 & 10.970 & 12.832 & 14.555 \\ 
+1.70 & 9.449 & 11.446 & 13.295 & 15.112 \\ 
+1.80 & 9.592 & 11.654 & 13.617 & 15.682 \\ 
+1.90 & 9.816 & 12.009 & 14.168 & 16.291 \\ 
+2.10 & 10.272 & 12.709 & 15.161 & 17.605 \\ 
+2.20 & 10.559 & 13.161 & 15.705 & 18.333 \\ 
+2.30 & 10.812 & 13.551 & 16.419 & 19.070 \\ 
+2.40 & 11.303 & 14.290 & 17.012 & 19.946 \\ 
+2.50 & 11.680 & 14.784 & 18.000 & 20.837 \\ 
+2.60 & 11.819 & 15.144 & 18.616 & 21.879 \\ 
+2.70 & 12.205 & 15.830 & 19.379 & 22.940 \\ 
+2.90 & 13.095 & 17.196 & 21.155 & 25.344 \\ 
+3.00 & 13.547 & 18.160 & 22.210 & 26.759 \\ 
+3.10 & 14.048 & 18.870 & 23.639 & 28.284 \\ 
+3.20 & 14.504 & 19.726 & 24.940 & 29.857 \\ 
+\bottomrule
+\end{tabular}
+   \vspace{0.5\baselineskip}
+\caption{Test Platform CPU Power (W)}
+\end{table} 
+
+
+\todo{Something about how any delta is about how the code uses more logic elements than our NOP loops. Our optimization window is therefore within that Delta}
+
+\todo{Be nice, say that this does not invalidate other work, but simply shows that hardware has now reached \reword{convergence} and basically there's little traction left}
+
+Having shown that 
+
+\fragment{This model is not supposed to be rigorous or precise. Rather we present it as the simplest possible non-trivial power model which accounts for the sources of variability in the power equations. In effect our model is functionally equivalent to the power equations
+presented previously with appropriate constants substituted \todo{sampled}. We present this model as our null hypothesis - for a model to be useful it must outperform this one. It is necessarily an oversimplification - it ignores clock gating. It should also consistently underestimate the true value, as the benchmark selected intentionally exercises the minimum possible number of logic elements while still performing work.}
+
+
+\todo{One limitation of this work stems from the nature of RAPL - it is an accumulative measurement of power taking into account all processes. On a loaded system it will measure all tasks }
+
+
+
+\todo{Decompose the model - find baseline vs non-baseline components}
+\todo{This kind of shows us that the baseline dominates}
+
+
+\fragment{Put another way, any optimization which trades runtime for power has a limited window of}
+
+
+\todo{equationify fact that energy is power * time, and assume we have power decreases, time static or increases}
+\todo{equationify baseline lt optimized lt unoptimized lt roofline} \todo{note - roofline is tdp max}
+
+\todo{Do maths think - by what margin would power have to go down to justify longer runtime? ratio of cost per watt, amortized cost per second}
+
+Nothing discussed so far precludes power optimization in practice.
+\todo{imply limits thus far are theoretical}
+Even these tight limits may still admit some benefits at extreme scale.
+Our final argument however is strictly economic.
+\reword{A great deal of attention is paid to the fact that power costs are approaching parity with machine construction costs.} The \choice{implicit, unspoken} \choice{consequence, corollary, implication} being that this has not yet happened. \todo{Ultimate point being here the price difference, machine vs power cost places a further limit on optimization utility. Even if we manage to find a slower, more power efficient method of computing a given result, the cost of energy saved has to be less than the added amortized runtime cost.}
