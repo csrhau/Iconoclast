@@ -3,7 +3,7 @@
 modprobe msr
 BASEDIR=../../..
 KNOWNS="PAPI_TOT_INS,PAPI_L1_LDM,PAPI_L1_STM,PAPI_TLB_DM,PAPI_L2_TCM,PAPI_STL_ICY"
-DELAY=60
+DELAY=120
 
 for FREQ in `$BASEDIR/Scripts/freq_avail.sh`; do
   echo Experiment: $FREQ
