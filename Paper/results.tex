@@ -1,2 +1,11 @@
 \section{Results}
 \label{sec:results}
+Present a series of limits on the potential gains from optimization.
+
+\begin{itemize}
+	\item The loosest limit we can impose is the fact that static power will be around. If somehow we reduce the activity factor of some workload, we will get at best x\% improvement.
+	\item that's not so meaningful, and a large amount of the activity factor comes simply from clock circuits and whatnot. So we extrapolate this base from our power data, and basically power(0)..power(4) is our feasible range. See diagramx
+	\item Ignoring blocking IO the critical path of a program takes x cycles. Assume fixed, non-fixed times. Power per cycle @ various frequencies.
+\end{itemize}
+
+\todo{Diagramx: Plot showing how clock circuitry dominates functional circuitry. We perform the same amount of work per cycle, but we either do [1..4] instructions on 1 core or 1 instruction on [1..4] cores. Expect two lines diverging. As each core comes on stream we see the clock circuitry and other supporting stuff cause steps.}

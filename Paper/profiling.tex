@@ -1,9 +1,20 @@
 \section{Power Profiling}
 \label{sec:profiling}
+\fragment{
+This means that the effect any particular software has on power consumption is bounded by the contribution of $P_{dyn}$ to $P_{tot}$. Furthermore, from the point of view of a performance engineer we need only concern ourselves with understanding and minimizing $P_{dyn}$.
+ 
+}
+
+\fragment{Performance engineers are also looking for ways to address power concerns. It is their efforts we hope to guide with this paper, and hence we constrain our focus to the interaction between software and power consumption for scientific codes. We therefore limit ourselves to considering contemporary CMOS chips with conventional architectures as these make up the majority of supercomputing systems.}
+\todo{Occam's razor}
+
 \fragment{Often power models are assessed by their performance relative to a measured baseline. Although this is important, this figure is somewhat meaningless without context. Our approach is one of quantifying 
 
 
 We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
+
+\todo{Make this bit less attacky:}
+It is also worth noting that this model is effectively useless from a code optimization standpoint as it does not take any software features into account. This property is intentional, as it allows us once again to provide a baseline from which to assess any models. One can only realistically expect to optimize a code to the level at which any changes can be accurately measured. A model which claims to assist in the optimization of codes can only offer optimizations to the extent it shows divergence from this baseline.
 
 
 }
@@ -16,6 +27,8 @@ Baseline against which to compare the work of others.
 \fragment{Our toy model is not the simplest model possible - It is well established and readily apparent that runtime is the largest contributory factor to power consumption. One could therefore imagine a simple power model}
 
 \fragment{We consider this to be the absolute minimum power consumption possible.}
+
+\fragment{Intentionally simplistic. Our decision to simplify activity factor to active cores is part of this. We assume that instruction pipe-lining does a reasonable job of keeping as much silicon active as possible, and we do not know how much area an individual instruction activates, and a large percentage of power use is from clock circuitry anyway}
 
 
 
