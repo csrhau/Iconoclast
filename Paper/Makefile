@@ -11,7 +11,7 @@ main: PLOTS $(MAIN_FILES)
 	pdflatex $(LFLAGS) main.tex
 
 PLOTS: FORCE
-	for plot in Frequency ; do \
+	for plot in Frequency tlp_vs_ilp ; do \
 	  make -C Plots/$$plot ; \
 	done
 

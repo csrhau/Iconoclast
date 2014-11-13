@@ -1,4 +1,24 @@
 \section{Power Profiling}
+
+\todo{something on the nature of optimization}
+
+As we have alluded to, in order to reduce the power draw associated with running particular software the only  component a software engineer has direct control over is the activity factor. Activity factor has a linear relationship with dynamic power and secondary relationships with both static and dynamic power through the actions of DVFS.
+
+This oversimplifies the situation however. A developer does not have direct control over the activity factor. Even if the developer had sufficiently intimate knowledge of a processor to judge how much silicon was involved with different choices of implementation.
+
+
+Recall that dynamic power is drawn as logic elements switch states. Although some of these elements are directly employed to carry out program logic, many more are dedicated to ancillary tasks. These tasks are further split into those which support program logic, for example the circuitry activated to handle cache misses, and more general tasks like clock signalling.
+\todo{Find that citation}
+
+Although some logic elements are employed to perform 
+
+\todo{From equations}
+
+
+ efforts of a software engineer focus 
+
+
+
 \label{sec:profiling}
 \fragment{
 This means that the effect any particular software has on power consumption is bounded by the contribution of $P_{dyn}$ to $P_{tot}$. Furthermore, from the point of view of a performance engineer we need only concern ourselves with understanding and minimizing $P_{dyn}$.
@@ -13,9 +33,16 @@ This means that the effect any particular software has on power consumption is b
 
 We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
 
+
+\begin{figure}
+\label{fig:tlpilp}
+\includegraphics[width=0.9\linewidth]{./Plots/tlp_vs_ilp/tlpilp-figure0.pdf}
+\caption{Power Overhead from TLP and ILP}
+\end{figure}
+
+
 \todo{Make this bit less attacky:}
 It is also worth noting that this model is effectively useless from a code optimization standpoint as it does not take any software features into account. This property is intentional, as it allows us once again to provide a baseline from which to assess any models. One can only realistically expect to optimize a code to the level at which any changes can be accurately measured. A model which claims to assist in the optimization of codes can only offer optimizations to the extent it shows divergence from this baseline.
-
 
 }
 \fragment{The unknown quantities in our simplified power equations can be empirically measured.}

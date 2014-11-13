@@ -1,0 +1,65 @@
+\documentclass[a4paper]{article}
+\usepackage{url} 
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[parfill]{parskip}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usetikzlibrary{external}
+\tikzset{external/system call={lualatex \tikzexternalcheckshellescape 
+         -enable-write18 -halt-on-error -interaction=nonstopmode 
+         -jobname "\image" "\texsource"}}
+\tikzexternalize % activate!
+\begin{document}
+
+\pgfplotstableread[col sep=comma]{./Data/digest.csv}\smootable
+\pgfplotstabletranspose[col sep=comma, colnames from=Frequency]{\footable}{\smootable}
+\pgfplotstabletypeset[string type]\smootable
+\pgfplotstabletypeset[string type]\footable
+
+
+\begin{figure}[ht]
+ 
+\begin{tikzpicture}
+  \begin{axis}[no markers, ylabel={Power \emph{(W)}}, xlabel={CPU Cores Active}, axis on top,
+    ymin=0,
+    xtick = {1,...,4},
+    %xticklabels={One, Two, Three, Four},
+    width=\textwidth,
+    height=5cm,
+    legend style={at={(0.5,-0.4)}, anchor=north,legend columns=-1, /tikz/every even column/.append style={column sep=0.5cm}}
+    ]
+      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{1}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{2}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{3}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{4}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{5}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{6}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{7}] {\footable};
+      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{8}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{9}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{10}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{11}] {\footable};
+      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{12}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{13}] {\footable};
+%      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{14}] {\footable};
+      \addplot table [col sep=comma,trim cells=true,x expr=\coordindex+1, y expr=\thisrowno{15}] {\footable};
+    \addlegendentry{1.60GHz}
+%    \addlegendentry{1.70GHz}
+%    \addlegendentry{1.80GHz}
+%    \addlegendentry{1.90GHz}
+%    \addlegendentry{2.10GHz}
+%    \addlegendentry{2.20GHz}
+%    \addlegendentry{2.30GHz}
+    \addlegendentry{2.40GHz}
+%    \addlegendentry{2.50GHz}
+%    \addlegendentry{2.60GHz}
+%    \addlegendentry{2.70GHz}
+    \addlegendentry{2.90GHz}
+%    \addlegendentry{3.00GHz}
+%    \addlegendentry{3.10GHz}
+    \addlegendentry{3.20GHz}
+  \end{axis}
+\end{tikzpicture}
+\end{figure}
+\end{document}

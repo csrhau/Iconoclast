@@ -1,0 +1,10 @@
+Intel(R) Optimized LINPACK Benchmark data
+
+Current date/time: Thu Nov 13 14:38:16 2014
+
+Real Time:	0m  00s 275627us
+Sys Time:	0s 160010us
+User Time:	0s 112007us
+PKG Energy:	4.296844J
+PP0 Energy:	2.745316J
+PKG Power:	15.589345W

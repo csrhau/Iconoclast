@@ -1,0 +1,35 @@
+\documentclass[a4paper]{article}
+\usepackage{url} 
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[parfill]{parskip}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usetikzlibrary{external}
+\tikzset{external/system call={lualatex \tikzexternalcheckshellescape 
+         -enable-write18 -halt-on-error -interaction=nonstopmode 
+         -jobname "\image" "\texsource"}}
+\tikzexternalize % activate!
+\begin{document}
+
+\pgfplotstableread[col sep=comma]{./Data/digest.csv}\smootable
+
+
+\begin{figure}[ht]
+ 
+\begin{tikzpicture}
+  \begin{axis}[ylabel={Power \emph{(W)}}, xlabel={Instructions per Cycle}, axis on top,
+    xtick = {1,...,4},
+    %xticklabels={One, Two, Three, Four},
+    height=4cm,
+    width=0.7\textwidth,
+    legend style={at={(0.5,-0.6)}, anchor=north,legend columns=-1, /tikz/every even column/.append style={column sep=0.5cm}}
+    ]
+      \addplot table [col sep=comma,trim cells=true,x expr=\thisrowno{0}, y expr=\thisrowno{1}] {\smootable};
+      \addplot table [col sep=comma,trim cells=true,x expr=\thisrowno{0}, y expr=\thisrowno{2}] {\smootable};
+    \addlegendentry{TLP}
+    \addlegendentry{ILP}
+  \end{axis}
+\end{tikzpicture}
+\end{figure}
+\end{document}
