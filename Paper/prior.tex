@@ -1,43 +1,51 @@
 \section{Review of Prior Art}
 \label{sec:prior}
 
-In this section we detail work which attempts to assess the impacts of software on power consumption. Needless to say this work would form the basis of any attempt at software-level power optimization and as such warrants our scrutiny. A wealth of material also exists on architecture-level power optimizations, however this is outside the scope of our study.
+In this section we detail previous work which investigates the impact of software on power consumption. A wealth of material also exists on architecture-level power optimization, however this is outside the scope of our study.\golden
 
-\todo{To be able to optimize you need to be able to find}
-
-\todo{taxonomy}
-
-\begin{table}[ht]
-  \begin{tabular}{|c|c|c|c|}
-    \cline{3-4}
-    \multicolumn{2}{c|}{} & \multicolumn{2}{c|} {Intrinsic Energy Characteristics} \\ \cline{3-4}
-    
-    \multicolumn{2}{c|}{} & Architecture Level & Instruction Level \\ \hline
-    
-      \multirow{6}{*}{\parbox[t]{1.4cm}{Activity\\Factor}} & \multirow{2}{*}{Simulator/Profiler} & Y & Z \\ \cline{3-4}
-                                    & & Y & Z \\ \cline{2-4}
-                                    & \multirow{2}{*}{Performance Counters} & Y & Z \\ \cline{3-4}
-                                    & & Y & Z \\ \cline{2-4}
-                                    & \multirow{2}{*}{Analytical Performance Model} & Y & Z \\ \cline{3-4}
-                                    & & Y & Z \\ \hline
-
-  \end{tabular}
-  \caption{Energy Modelling Taxonomy}
-  \label{table:taxonomy}
-\end{table}
+The ability to accurately measure a property is required in order to optimize for it. That said, reliable figures for power consumption are hard to obtain because complex hardware is required to measure instantaneous current at high temporal and currency resolutions. Several approachees  While each approach has its merits, not all are feasible tools for the average software engineer. Analytical Modelling and Architectural Simulation are both not suitable for this use case because they rely on intimate knowledge of the underlying hardware platform and are not 
 
 
-\todo{tear this apart: Energy Measurement and Prediction for Multi-threaded Programs}
+
+
+
+
+
+This leaves us with Activity Factor Estimation and  Direct Measurement to concider.
+
+\todo{Analytical Modelling, come up with a descriptive model of cpu and work stuff out.}
+
+\todo{Architectural simulation - this works out the value for C for a target architecture. Find this bit in the book because it's well written.}
+
+\todo{Activity Factor Estimation}
+
+\todo{Direct Measurement - good because of accuracy, not useful because out of scope for average developer. powermon2.}
+
+
+Architectural models can offer a breakdown of energy consumption by architectural block, but their results are difficult to relate back to software. They also rely on a detailed knowledge of processor internals which is seldom in the public domain. Instruction-level approaches measure average energy per instruction (EPI) figures to model processor energy. This approach yields results which are easier to relate to software, however it does not provide the same insights about the underlying sources of power consumption.\golden
+
+
+Out of the options above, we conclude that the most applicable for use is an instruction level energy model based on activity factor estimation. This approach has been explored by a number of different groups in various ways. An \reword{archetypal} example is found  \todo{This is the example Power Prediction for Intel XScale Processors Using Performance Monitoring Unit Events}
+
+
+
+
+
+
+
+
+\todo{tear this apart: Energy Measurement and Prediction for Multi-threaded Programs. 
+The deviations usually lie below 10%
+}
 
 
 \todo{
 \begin{itemize}
-\item Measurement vs modelling
-\item Power is the integral and hard to measure
+\item Measurement vs modelling Power is the integral and hard to measure
 \item Approaches to measurement
-\item Modelling taxonomy
 \end{itemize}
 }
 
 
 \todo{Make sure to make the point that the accuracy quoted for models hovers around the same amount and is usually quoted as a simple average. There are several problems with such a figure. The simplest issue is that if a model can both over- and under-estimate, a low average error can be observed even when individual predictions are way off. If we give the authors the benefit of the doubt and assume they are reporting mean absolute error values. Even then, this methodology is somewhat flawed. To state a model yields an average error of 5\% does not necessarily display how good a model is. The nature of power, with both static and dynamic components along with known bounds means that reasonable guesses to power draw can be made a-priori. Any model constructed only has merit in as much as it beats these naive predictions.} 
+

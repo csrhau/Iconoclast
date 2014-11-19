@@ -1,14 +1,32 @@
 \section{Power Profiling}
+\label{sec:profiling}
 
-\todo{something on the nature of optimization}
+We intend to answer two related questions with the practical component of our work. The first of these concerns placing bounds on how much the power consumption of arbitrary code can vary by. By doing so we derive an upper limit of how much it is possible to optimize any code by. These bounds also help us tackle a second issue - namely to provide a fairer appraisal of model accuracies than those often found in the literature.
 
-As we have alluded to, in order to reduce the power draw associated with running particular software the only  component a software engineer has direct control over is the activity factor. Activity factor has a linear relationship with dynamic power and secondary relationships with both static and dynamic power through the actions of DVFS.
+When optimizing software for reduced power consumption, the only runtime component a software engineer has any influence over is its activity factor. As previously discussed, the activity factor of a processor has a linear relationship with dynamic power and secondary relationships with both static and dynamic power through the actions of DVFS. A developer wishing to save energy should therefore aim to modify their code to reduce its activity factor.
 
-This oversimplifies the situation however. A developer does not have direct control over the activity factor. Even if the developer had sufficiently intimate knowledge of a processor to judge how much silicon was involved with different choices of implementation.
+The relationship between code composition and activity factor is a complex one. Recall that dynamic power is drawn as logic elements switch states. Although some of these elements are used to carry out program logic, many more are dedicated to secondary tasks like instruction decoding or propagating clock signals. The latter proves particularly onerous, as by definition the circuitry driven by a clock signal has an activity factor of 1 as it changes state each cycle.\findref
 
 
-Recall that dynamic power is drawn as logic elements switch states. Although some of these elements are directly employed to carry out program logic, many more are dedicated to ancillary tasks. These tasks are further split into those which support program logic, for example the circuitry activated to handle cache misses, and more general tasks like clock signalling.
-\todo{Find that citation}
+\todo{We consider the accessible dynamic range}
+\begin{equation}
+0 < \alpha < \beta < 1
+\end{equation}
+
+\fragment{We feel it is disingenuous to speed up a code by a large factor and then claim to have optimized for energy. }
+
+\todo{the definitions matter}
+
+
+
+
+
+There 
+Even if the developer had sufficiently intimate knowledge of a processor to judge how much of a chip was involved with different choices of implementation, 
+
+
+
+\todo{clock signals}
 
 Although some logic elements are employed to perform 
 
@@ -18,18 +36,15 @@ Although some logic elements are employed to perform
  efforts of a software engineer focus 
 
 
-
-\label{sec:profiling}
 \fragment{
 This means that the effect any particular software has on power consumption is bounded by the contribution of $P_{dyn}$ to $P_{tot}$. Furthermore, from the point of view of a performance engineer we need only concern ourselves with understanding and minimizing $P_{dyn}$.
  
 }
 
-\fragment{Performance engineers are also looking for ways to address power concerns. It is their efforts we hope to guide with this paper, and hence we constrain our focus to the interaction between software and power consumption for scientific codes. We therefore limit ourselves to considering contemporary CMOS chips with conventional architectures as these make up the majority of supercomputing systems.}
+
 \todo{Occam's razor}
 
 \fragment{Often power models are assessed by their performance relative to a measured baseline. Although this is important, this figure is somewhat meaningless without context. Our approach is one of quantifying 
-
 
 We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
 
@@ -87,11 +102,13 @@ Frequency (GHz) & 1 & 2 & 3 & 4 \\ \midrule
 \bottomrule
 \end{tabular}
    \vspace{0.5\baselineskip}
-\caption{Test Platform CPU Power (W)}
+\caption{Test Platform Base CPU Power (W)}
 \end{table} 
 
 
-\todo{Something about how any delta is about how the code uses more logic elements than our NOP loops. Our optimization window is therefore within that Delta}
+
+\todo{table 2 - benchmark results. Linpack is 35.2428 for 100 seconds}
+\todo{Something about how any delta is about how the code uses more logic elements than our NOP lo ops. Our optimization window is therefore within that Delta}
 
 \todo{Be nice, say that this does not invalidate other work, but simply shows that hardware has now reached \reword{convergence} and basically there's little traction left}
 
@@ -108,9 +125,11 @@ presented previously with appropriate constants substituted \todo{sampled}. We p
 \todo{Decompose the model - find baseline vs non-baseline components}
 \todo{This kind of shows us that the baseline dominates}
 
+\fragment{Limitations to optimizations - the superfluous and the logical equivalences. The first is a no-brainer and boils down to removing unnecessary pre-fetching}
+
+\fragment{Either optimizations which are off the critical path, or else those which are on the critical path }
 
 \fragment{Put another way, any optimization which trades runtime for power has a limited window of}
-
 
 \todo{equationify fact that energy is power * time, and assume we have power decreases, time static or increases}
 \todo{equationify baseline lt optimized lt unoptimized lt roofline} \todo{note - roofline is tdp max}
@@ -122,3 +141,6 @@ Nothing discussed so far precludes power optimization in practice.
 Even these tight limits may still admit some benefits at extreme scale.
 Our final argument however is strictly economic.
 \reword{A great deal of attention is paid to the fact that power costs are approaching parity with machine construction costs.} The \choice{implicit, unspoken} \choice{consequence, corollary, implication} being that this has not yet happened. \todo{Ultimate point being here the price difference, machine vs power cost places a further limit on optimization utility. Even if we manage to find a slower, more power efficient method of computing a given result, the cost of energy saved has to be less than the added amortized runtime cost.}
+
+
+\todo{Legitimate targets for optimization: removing redundant prefetch operations as per phi paper.}

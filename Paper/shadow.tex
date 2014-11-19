@@ -2,17 +2,20 @@
 
 \todo{\begin{enumerate}
 \item Merge this delta section - use for snippets
-\item Consider a background section
 \item Consider moving Code optimization out of intro
-\item Write up power equations
-\item Find recent source for percentage amount $P_{dyn}$
-\item Are we limited to $P_{dyn}$?Think so
 \item Optimizable range is only a small part of this part
 \item Write a clear limitations section
 
 \end{enumerate}
 }
 
+\todo{State that we use linpack as an arbitrary code. The reader can substitute in their own}
+
+\todo{Make comment about how reducing the activity factor is in some sense counter to time optimization - that doing more is better. }
+
+\todo{Give the potential optimization space - i.e. taking a code at our upper bound, the space of things that would be considered a genuine power optimization can be found for various metrics tdp td2p. draw an awesome polytope}
+
+\todo{Energy Measurement and Prediction for Multi-threaded Programs -- this gives a simple model based on power modelling and claims sub 10 \%}
 
 
 Architectural power reduction techniques focus on decreasing each of these terms.
@@ -60,6 +63,7 @@ tant contributor to total SoC power.}
 
 
 
+\todo{PMB2014 checkpointing paper - exascale expects 70\% of energy to go to memory dimms.}
 
 
 
@@ -69,6 +73,9 @@ tant contributor to total SoC power.}
 
 
 
+\todo{PMBS2014 checkpointing paper 2 - extreme low or high frequency higher failure rate per job.}
+
+\todo{Destroy this: Models and Metrics to Enable Energy-Efficiency Optimizations}
 
 
 
@@ -76,8 +83,21 @@ tant contributor to total SoC power.}
 
 
 
-
-
+%\begin{table}
+%\centering
+%\small
+%\begin{tabular}{@{}lll@{}} \toprule
+%&\multicolumn{2}{c}{Granularity} \\ \cmidrule(r){2-3}
+%Approach & Instruction Level & Architecture Level \\ %\midrule
+%Measurement & Hanhel et. al.~\cite{hahnel:2012aa}  & %\todo{find eg}\\
+%Perf. Counters & Shao \& Brooks~\cite{shao:2013aa} & %Isci \& Martonosi~\cite{isci:2003aa} \\
+%Simulation &  Tiwari et. al.~\cite{tiwari:1994aa} & Li et. al.~\cite{li:2009aa} \\
+%Analytical Modelling & Hong et. al.~\cite{hong:2010aa} %& Karkhanis \& Smith~\cite{karkhanis:2007aa} \\
+%\bottomrule
+%\end{tabular}
+ % \caption{Energy Estimation Taxonomy}
+  %\label{tab:taxonomy}
+%d\end{table}
 
 
 
