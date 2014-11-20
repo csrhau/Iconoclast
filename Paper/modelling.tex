@@ -1,52 +1,63 @@
-\section{Power Profiling}
-\label{sec:profiling}
+\section{Power Modelling}
+\label{sec:modelling}
 
-We intend to answer two related questions with the practical component of our work. The first of these concerns placing bounds on how much the power consumption of arbitrary code can vary by. By doing so we derive an upper limit of how much it is possible to optimize any code by. These bounds also help us tackle a second issue - namely to provide a fairer appraisal of model accuracies than those often found in the literature.
+We consider two related issues in the practical component of our work. The first task is to identify the bounds of CPU power consumption when running arbitrary code. 
+This allows us to place an upper limit on how much it is possible to optimize any code by. These bounds also help us tackle a second issue - namely to provide a fairer appraisal of model accuracies than often found elsewhere in the literature.
 
-When optimizing software for reduced power consumption, the only runtime component a software engineer has any influence over is its activity factor. As previously discussed, the activity factor of a processor has a linear relationship with dynamic power and secondary relationships with both static and dynamic power through the actions of DVFS. A developer wishing to save energy should therefore aim to modify their code to reduce its activity factor.
+The only relevant property an engineer can influence when optimizing software for reduced power consumption is the activity factor. As previously discussed, the activity factor of a processor has a linear relationship with dynamic power and secondary relationships with both static and dynamic power through the actions of DVFS. A developer wishing to save energy should therefore aim to modify their code to reduce its activity factor.
 
-The relationship between code composition and activity factor is a complex one. Recall that dynamic power is drawn as logic elements switch states. Although some of these elements are used to carry out program logic, many more are dedicated to secondary tasks like instruction decoding or propagating clock signals. The latter proves particularly onerous, as by definition the circuitry driven by a clock signal has an activity factor of 1 as it changes state each cycle.\findref
+Although we defined activity factor as a scalar between zero and one, we know that in practice its range will be much more limited. Although some processor elements are responsible for handing program logic, many more are dedicated to ongoing ancillary tasks like instruction decoding or propagating clock signals. Conversely, we know that modern processors are not able to keep all their functional units active simultaneously.  We define the range of values activity factors can reasonably take whilst running a code as $[\alpha  .. \beta]$ where $0 < \alpha < \beta < 1$.
+
+\begin{figure}[ht]                                                               
+\centering                                                                      
+\lstset{basicstyle=\ttfamily\footnotesize\bfseries,                             
+      frame=tb}                                                                 
+\lstinputlisting[]{Listings/nops.c}                             
+\caption{Baseline Benchmark}                            
+\label{fig:nopjmpres}                                                           
+\end{figure}  
+
+We rely on empirical measurement to discover the power draw associated with activity factors $\alpha$ and $\beta$. Our first benchmark, shown in \figurename~\ref{fig:nopjmpres}, is a simple busy waiting loop with no side-effects. By monitoring the power consumed whilst running this code we derive our lower bound. We repeat this process to produce a baseline for each combination of clock frequency and core count as shown in Table~\ref{tab:baseline}. It is safe to assume that any non-trivial code requires strictly more power than this benchmark which performs no work.
+
+Having established our $\alpha$-baseline we now turn our attention to the $\beta$-limit. Although we could do a system-wide one we just measure the code to be optimized, this is a tight bound.
 
 
-\todo{We consider the accessible dynamic range}
-\begin{equation}
-0 < \alpha < \beta < 1
-\end{equation}
+
+
+
+We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
+
+
+\todo{Make sure table is in the right place}
+
+
+\begin{figure}
+\label{fig:pow}
+\includegraphics[width=0.9\linewidth]{./Plots/edp_optimization_space/optspace-figure0.pdf}
+\caption{Power Optimization Window}
+\end{figure}
+
+
+
+
 
 \fragment{We feel it is disingenuous to speed up a code by a large factor and then claim to have optimized for energy. }
 
 \todo{the definitions matter}
 
-
-
-
-
-There 
-Even if the developer had sufficiently intimate knowledge of a processor to judge how much of a chip was involved with different choices of implementation, 
-
-
-
-\todo{clock signals}
-
-Although some logic elements are employed to perform 
-
-\todo{From equations}
-
-
- efforts of a software engineer focus 
-
-
-\fragment{
-This means that the effect any particular software has on power consumption is bounded by the contribution of $P_{dyn}$ to $P_{tot}$. Furthermore, from the point of view of a performance engineer we need only concern ourselves with understanding and minimizing $P_{dyn}$.
- 
+\fragment{ 
+The latter proves particularly onerous, as by definition the circuitry driven by a clock signal has an activity factor of 1 as it changes state each cycle \findref. 
 }
+
+
+
 
 
 \todo{Occam's razor}
 
 \fragment{Often power models are assessed by their performance relative to a measured baseline. Although this is important, this figure is somewhat meaningless without context. Our approach is one of quantifying 
 
-We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
+
 
 
 \begin{figure}
@@ -79,6 +90,8 @@ Baseline against which to compare the work of others.
 
 
 \begin{table}
+
+
 \centering
 \small
 \begin{tabular}{@{}ccccc@{}} \toprule
@@ -103,6 +116,7 @@ Frequency (GHz) & 1 & 2 & 3 & 4 \\ \midrule
 \end{tabular}
    \vspace{0.5\baselineskip}
 \caption{Test Platform Base CPU Power (W)}
+\label{tab:baseline}
 \end{table} 
 
 
@@ -121,6 +135,19 @@ presented previously with appropriate constants substituted \todo{sampled}. We p
 \todo{One limitation of this work stems from the nature of RAPL - it is an accumulative measurement of power taking into account all processes. On a loaded system it will measure all tasks }
 
 
+
+
+
+
+
+
+
+
+\begin{figure}
+\label{fig:feasible_envelope}
+\includegraphics[width=0.9\linewidth]{./Plots/dummy_model/dummymodel-figure0.pdf}
+\caption{Feasible Power Envelope}
+\end{figure}
 
 \todo{Decompose the model - find baseline vs non-baseline components}
 \todo{This kind of shows us that the baseline dominates}
