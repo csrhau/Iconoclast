@@ -20,33 +20,35 @@
     height=5cm,
     legend style={at={(0.5,-0.4)}, anchor=north,legend columns=-1, /tikz/every even column/.append style={column sep=0.5cm}}
     ]
+
+
      \pgfmathsetmacro{\baseline}{29.857}
-     \pgfmathsetmacro{\power}{38.157}
-     \pgfmathsetmacro{\seconds}{40}
-     \pgfmathsetmacro{\energy}{\power * \seconds}
+     \pgfmathsetmacro{\sedtargetpower}{38.157} % TODO change me
+     \pgfmathsetmacro{\sedtargetseconds}{40} % TODO change me
+     \pgfmathsetmacro{\sedtargetenergy}{\sedtargetpower * \sedtargetseconds}
  
-     \addplot[domain=0:60, red] {\power * x};
+     \addplot[domain=0:60, red] {\sedtargetpower * x};
      \addlegendentry{$P_{\beta}$ Upper Bound}
      
      \addplot[domain=0:60, blue] {\baseline * x};
      \addlegendentry{$P_{\alpha}$ Lower Bound} 
   
-     \addplot[domain=39:48, lightgray] { (\energy * \seconds) / ((x))};
-     \addplot[domain=33:41, lightgray] { (\power / \seconds^2) * x^3}; % Power time same ratio
+     \addplot[domain=39:48, lightgray] { (\sedtargetenergy * \sedtargetseconds) / ((x))};
+     \addplot[domain=33:41, lightgray] { (\sedtargetpower / \sedtargetseconds^2) * x^3}; % Power time same ratio
      \addlegendentry{$EDP$} 
    
-     \addplot[domain=39:48, gray] { (\energy * \seconds *  \seconds) / ((x)^2)};
-     \addplot[domain=33:41, gray] { (\power / \seconds^3) * x^4}; % Power time same ratio
+     \addplot[domain=39:48, gray] { (\sedtargetenergy * \sedtargetseconds *  \sedtargetseconds) / ((x)^2)};
+     \addplot[domain=33:41, gray] { (\sedtargetpower / \sedtargetseconds^3) * x^4}; % Power time same ratio
 
      \addlegendentry{$ED^{2}P$} 
     
   
-     \addplot[domain=39:48, darkgray] { (\energy * \seconds * \seconds * \seconds) / ((x)^3)};
-     \addplot[domain=33:41, darkgray] { (\power / \seconds^4) * x^5}; % Power time same ratio
+     \addplot[domain=39:48, darkgray] { (\sedtargetenergy * \sedtargetseconds * \sedtargetseconds * \sedtargetseconds) / ((x)^3)};
+     \addplot[domain=33:41, darkgray] { (\sedtargetpower / \sedtargetseconds^4) * x^5}; % Power time same ratio
      \addlegendentry{$ED^{3}P$} 
     
       
-     \node[label={120:{Un-optimized}},circle,fill,inner sep=2pt] at (axis cs:\seconds,\energy) {};
+     \node[label={120:{Un-optimized}},circle,fill,inner sep=2pt] at (axis cs:\sedtargetseconds,\sedtargetenergy) {};
  \end{axis}
 \end{tikzpicture}
 \end{figure}
