@@ -1,8 +1,17 @@
 \section*{Introduction \golden}
 Driven by Moore's Law, advances in processor design have delivered improvements in CPU performance for decades. As physical limits are reached, however, refinements to the same basic technologies are beginning to show diminishing returns. One side-effect of this is an unsustainable rise in system power usage, which the US Department of Energy has identified as a primary constraint for exascale systems \cite{shalf:2011aa}. \golden
 
-Hardware manufacturers are already prioritising energy efficiency in their processor designs~\cite{kurd:2014aa}. In turn, some groups have suggested that software modifications will be required to fully exploit the energy efficiency improvements of modern processors~\cite{shao:2013aa}. This is analogous to the current practice of tuning code for reduced runtime by exploiting specific processor features like vectorisation or the cache hierarchy. These groups expect code optimisation to be applied to minimizing power consumption as well as run time in the future. \golden
+Hardware manufacturers are increasingly prioritising energy efficiency in their processor designs~\cite{kurd:2014aa}. In turn, some groups expect that software modifications will be required to fully exploit energy efficiency improvements in modern processors~\cite{shao:2013aa}. They suggest this process will be analogous to the current practice of tuning code to reduce runtime.
 
-A body of research is accumulating as the search for techniques to identify and reason about software power optimizations continues. This paper is intended to provide a critical review of the field; identifying the opportunities present and highlighting the amount of benefit which can be realistically expected of them. We first review the prior art in this area and identify overall trends in the approaches taken. Secondly we undertake an empirical investigation, applying some of the proposed techniques in order to understand how they may benefit developers in practice. \golden
 
-The remainder of this paper is organized as follows: Section~\ref{sec:background} details the problem background and introduces some core concepts and metrics. Section~\ref{sec:prior} gives an overview of prior research carried out on this topic. Section~\ref{sec:modelling} then details our empirical investigations into power profiling and our appraisal of the techniques described in Section~\ref{sec:prior}. We provide the results of this investigation in Section~\ref{sec:results} before presenting our conclusions in Section~\ref{sec:conclusion}. \golden
+%This is analogous to the current practice of tuning code for reduced runtime by exploiting specific processor features like vectorisation or the cache hierarchy. These groups expect code optimisation to be applied to minimizing power consumption as well as run time in the future. \golden
+
+%A body of research is accumulating as the search for techniques to identify and reason about software power optimizations continues.
+
+This paper attempts to provide a critical review of the field; identifying the opportunities present and the amount of benefit which they offer. Our ultimate aim is to help performance engineers make an informed choice when deciding where focus their optimization efforts. To this end we derive a simple yet informative heuristic model of the benefits a given code can expect from power optimization. We then then undertake an empirical investigation in which we apply techniques proposed elsewhere in the literature in order to understand how they may help developers to identify power optimizations.
+ \golden
+
+The remainder of this paper is structured as follows: Section~\ref{sec:background} details the problem background and introduces some core concepts and metrics. Section~\ref{sec:quantifying} then details our heuristic model and our experimental approach. We provide the results of this investigation in Section~\ref{sec:results} before presenting related work in Section~\ref{sec:prior} and our conclusions in Section~\ref{sec:conclusion}. \golden
+
+
+%Section~\ref{sec:prior} gives an overview of prior research carried out on this topic.

@@ -3,7 +3,7 @@ MAIN_FILES += library.bib
 
 LFLAGS := -interaction=nonstopmode
 
-main: PLOTS $(MAIN_FILES)
+main: PLOTS $(MAIN_FILES) ./Plots/model_drawing/sample.tex
 	rm -f *.log *.aux *.pdf *.bbl *.blg
 	pdflatex $(LFLAGS) main.tex
 	bibtex main.aux

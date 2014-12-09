@@ -13,7 +13,7 @@ clean:
 	rm -rf *.log
 	rm -rf *.png
 
-multicode.pdf : multicode.tex
+multicode.pdf : multicode.tex teepee_core.tex
 	$(TEX) multicode.tex
 
 multicode.png: multicode.pdf

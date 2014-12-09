@@ -18,29 +18,13 @@
 \caption{Power Overhead from TLP and ILP}
 \end{figure}
 
-\todo{State that we use linpack as an arbitrary code. The reader can substitute in their own}
+\todo{Make comment about how reducing the activity factor is in some sense counter to time optimization - that doing more per unit time is better. }
 
-\todo{Make comment about how reducing the activity factor is in some sense counter to time optimization - that doing more is better. }
-
-\todo{Give the potential optimization space - i.e. taking a code at our upper bound, the space of things that would be considered a genuine power optimization can be found for various metrics tdp td2p. draw an awesome polytope}
 
 \todo{Energy Measurement and Prediction for Multi-threaded Programs -- this gives a simple model based on power modelling and claims sub 10 \%}
 
 
-Architectural power reduction techniques focus on decreasing each of these terms.
-For the purposes of software optimizations, however, we are limited to the dynamic power term, $P_{dyn}$, as this 
-
-\reword{Common power reduction techniques
-are based on architectural, logic or circuit design methods, decreasing f , AFi,
-N or Vi [Zang et al. 2000; Hsieh and Pedram 2000; Shang et al. 2002]. TAKEN FROM Timing-Aware Power-Optimal Ordering of Signals}
-
-
-
-\todo{Check this when book arrives}
-
-
-\todo{STOLEN:
-S. Kaxiras and M. Martonosi, Computer Architecture Techniques for Power-Efficiency, 1st ed. Morgan and
+\todo{citation S. Kaxiras and M. Martonosi, Computer Architecture Techniques for Power-Efficiency, 1st ed. Morgan and
 Claypool Publishers, 2008.
 
 The end of Dennard scaling is expected to shrink the range of DVFS in future nodes, limiting the energy savings of this technique. This paper evaluates how much we can increase the effectiveness of DVFS by using a software decoupled access-execute approach. Decoupling the data access from execution allows us to apply optimal voltage-frequency selection for each phase and therefore improve energy efficiency over standard coupled execution.

@@ -1,11 +1,15 @@
-\section{Power Modelling}
-\label{sec:modelling}
+\section{Quantifying Power Optimizations}
+\label{sec:quantifying}
 
 We consider two related issues in the practical component of our work. The first task is to establish bounds on how much CPU power draw can vary whilst running arbitrary code. This allows us to place an upper limit on how much is possible to optimize a given code by. These bounds also help us tackle a second issue - namely to provide an objective appraisal of the power models proposed elsewhere in the literature.
 
-The only relevant property an engineer can influence when optimizing software for reduced power consumption is the activity factor. As previously discussed, the activity factor of a processor has a linear relationship with dynamic power and secondary non-linear relationships through the actions of DVFS with both static and dynamic power. A developer wishing to save energy should therefore aim to modify their code to reduce its contribution to activity factor.
+The only relevant property an engineer can influence while optimizing software for reduced power consumption is activity factor. As previously discussed, the activity factor of a processor has a linear relationship with dynamic power and secondary non-linear relationships with both static and dynamic power. A developer wishing to save energy should therefore aim to modify their code to reduce its contribution to activity factor.
 
-Although activity factor is defined as a scalar between zero and one, we know that in practice its range will be much more limited. Although some processor elements are responsible for handing program logic, many more are dedicated to ongoing ancillary tasks like instruction decoding or propagating clock signals. Conversely, we know that processors are not able to keep all their functional units active simultaneously.  We define the range of values activity factors can reasonably take whilst running a code as $[\alpha  .. \beta]$ where $0 < \alpha < \beta < 1$.
+Although activity factor is defined as a scalar between zero and one, we know that in practice its range will be more limited. Many logic elements are dedicated to unavoidable tasks which involve frequent state changes, the most obvious being the propagation of clock signals. Conversely, we know that processors are not able to keep all their functional units active simultaneously. We therefore define the range of values that activity factor can feasibly take whilst running a code as $[\alpha  .. \beta]$ where $0 < \alpha < \beta < 1$.
+
+From equations \ref{eq:totpwr}-\ref{eq:leakpwr} we know that, for a fixed platform and temperature, activity factors $\alpha$ and $\beta$ will be associated with constant power draws $P_{\alpha}$ and $P_{\beta}$ respectively, where $P_{\alpha} < P_{\beta}$. The values of these terms are naturally system-dependent and should be determined empirically. 
+
+We are now ready to derive our visual heuristic to guide optimization. We begin by plotting lines with gradients $P_{\alpha}$ and $P_{\beta}$ in \figurename~\ref{fig:pow} to establish a feasible performance envelope. This represents the set of all $(P_{opt}, t_{opt})$ pairs for which $P_{\alpha}~<~P_{opt}~<~P_{\beta}$, with no bounds placed on runtime, $t_{opt}$. It should be clear that all codes,  and by extension their maximally-optimized equivalents, must be represented somewhere within this envelope.
 
 \begin{figure}[ht]                                                               
 \centering                                                                      
@@ -16,52 +20,54 @@ Although activity factor is defined as a scalar between zero and one, we know th
 \label{fig:nopjmpres}                                                           
 \end{figure}  
 
-We rely on empirical measurement to discover the power draws $P_{\alpha}$ and $P_{\beta}$ associated with activity factors $\alpha$ and $\beta$. Our first benchmark, shown in \figurename~\ref{fig:nopjmpres}, is a simple busy waiting loop with no side-effects. By monitoring the power consumed whilst running this code we derive our lower bound ${P_{\alpha}}$. It is safe to assume that any non-trivial code requires strictly more power than our benchmark which performs no work. We repeat this process to produce a baseline for each combination of clock frequency and core count as shown in Table~\ref{tab:baseline}.
+We approximate $P_{\alpha}$ by monitoring the power consumed whilst running the code given in \figurename~\ref{fig:nopjmpres}, which effectively performs no work. It is safe to assume that this benchmark has a lower activity factor than a non-trivial code on any reasonable platform. We defer measurement of $P_{\beta}$ for now as its precise value is not relevant to the current discussion.
 
-Having established our $P_{\alpha}$ baseline we now turn our attention to the $P_{\beta}$ limit. There is no obvious way to construct an artificial benchmark which exercises a maximal set of logic elements. Fortunately, when optimizing a specific code there is no need to devise such a system-wide upper bound. We simply use the power draw of our  un-optimized code as our upper limit, because trivially a worthwhile code optimization cannot yield worse performance.
+To constrain our search further we consider the metric we wish to reduce. We know that for two logically equivalent codes $a$ and $b$, the transformation $a \to b$ is a valid optimization with respect to a cost metric $M$ if and only if $M(a) > M(b)$. We plot the curve linking all points $b$ within our envelope where $M(a) = M(b)$. By definition, any valid optimization can only exist below this line. The exact equation of this curve varies depending on $M$, but can be found through basic algebra. For $ED^{2}P$ we get $y = (P_{a} \times t_{a}^{3}) / x^2$
 
-We plot lines with gradients $P_{\alpha}$ and $P_{\beta}$ in \figurename~\ref{fig:pow} to establish a feasible performance envelope. This represents the set of all $(P_{opt}, t_{opt})$ pairs for which $P_{\alpha} < P_{opt} < P_{\beta}$, with no bounds placed on runtime, $t_{opt}$. It should be clear that any optimisation must exist somewhere within this envelope.
+Our final bound considers what it means to optimize code for reduced power draw. Our definition should be flexible enough to include optimizations which deliver significant reductions in power draw with minuscule reductions in runtime. On the other hand, we must avoid being too lenient. A large reduction in runtime associated with a negligible reduction in power draw should be regarded as a classical optimization.
 
-To constrain our search further we must consider the metric we wish to reduce. We know that for two logically equivalent codes $a$ and $b$, the transformation $a \to b$ is a valid optimization with respect to a cost metric $M$ if and only if $M(a) > M(b)$. In other words, if we plot a linking all points $a$ in our envelope where $M(a) = M(unopt.)$ then any valid optimization can only exist below this line.
+Although this distinction may seem somewhat academic, it is an important consideration when searching for optimizations. In general, when the performance penalty is bigger in one domain than the other then intuitively the tools and techniques developed for that domain are better suited to finding the optimization.
+\begin{figure}
+\input{./Plots/model_drawing/sample}
+\caption{Optimization Classifications}\label{fig:pow}
+\end{figure}
 
-Our final bound concerns what it means to optimize for energy efficiency. All else being equal, energy to solution will reduce if a code can be made to run faster. That said, it would be disingenuous to claim this inevitable side-effect of classical optimization is also a valid energy optimization. The simplest solution would be to state that true power optimizations do not reduce runtime. We feel this definition is overly restrictive, however, as it excludes hypothetical optimizations which deliver significant reductions in power draw with minuscule reductions in runtime.
+% All else being equal, energy to solution will reduce if a code can be made to run faster. That said, there is a clear difference between an optimization which specifically targets energy efficiency and this inevitable side-effect of classical optimization.
 
-The definition we have settled on is that the transformation $a \to b$ is a valid power optimization with respect to a chosen metric if the reduction in power draw it delivers accounts for the greatest proportion of improvement in said metric. Formally, we say \todo{Tricky equation}. Above this bound the reduction in runtime contributes a larger improvement to the cost metric than any reduction in power, meaning code changes in this region should be considered as classical runtime optimizations. By extension, all valid power optimizations must lie below this bound.
+The definition we have settled on is that the transformation $a \to b$ is a valid power optimization w.r.t a metric $M$ if it is a valid optimization w.r.t. $M$ and the reduction in power draw has a greater impact on improvement in $M$ than any reduction in runtime. Once again, we plot the curve where both two factors have equal effects. All valid power optimizations must lie below this bound.
+
+By plotting the various limits described above we subdivide the performance envelope into three distinct areas corresponding to power optimizations, time optimizations and degraded performance. For the purposes of illustration we add lines of constant time and energy allowing us to subdivide the plot further into the areas labelled:
+\begin{enumerate}
+\item Power-only optimizations
+\item Power-mostly optimizations
+\item Time-mostly optimizations
+\item Time-only optimizations
+\item Code degradation
+\end{enumerate}
+
+Between them, areas 1 and 2 represent the section of the performance envelope within which power optimization tools are most capable of identifying potential optimizations. Conventional tools should be used when trying to identify optimizations outside this area. The only parameters required to delineate this space for a given code are values for its runtime and energy costs and knowledge of system baseline power.
+
+Despite its simplicity, this technique offers a surprising wealth of information. Figure \ref{fig:modelpoints} shows the power optimization area we observed when we ran the CFD benchmark of the Rodinia benchmark suite.
 
 
 \begin{figure}
-\includegraphics[width=0.9\linewidth]{./Plots/edp_optimization_space/optspace-figure0.pdf}
-\caption{Power Optimization Window}\label{fig:pow}
+\label{fig:modelpoints}
+\input{./Plots/optimization_teepee/teepee_core}
+\caption{Power Heuristic for Rodinia CFD}
 \end{figure}
 
-In \figurename~\ref{fig:pow} we plot the limits described above for a hypothetical code. 
-
-
-
-
+	
+	
+\todo{Working point}
 
 We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
 
 
-\todo{Make sure table is in the right place}
+\fragment{this tent shaped region}
+\fragment{Despite its simplicity, this simple model provides us with lots of information. \todo{biggest gain to be had by using power vs classical optimization, energy reduction possible through power optimization ignoring any runtime effects, the maximum amount of time we can trade for any gains in energy efficiency, and a convenient way of comparing different codes}}
 
 
 
-
-
-\fragment{We feel it is disingenuous to speed up a code by a large factor and then claim to have optimized for energy. }
-
-\todo{the definitions matter}
-
-\fragment{ 
-The latter proves particularly onerous, as by definition the circuitry driven by a clock signal has an activity factor of 1 as it changes state each cycle \findref. 
-}
-
-
-
-
-
-\todo{Occam's razor}
 
 \fragment{Often power models are assessed by their performance relative to a measured baseline. Although this is important, this figure is somewhat meaningless without context. Our approach is one of quantifying 
 
@@ -70,8 +76,10 @@ The latter proves particularly onerous, as by definition the circuitry driven by
 It is also worth noting that this model is effectively useless from a code optimization standpoint as it does not take any software features into account. This property is intentional, as it allows us once again to provide a baseline from which to assess any models. One can only realistically expect to optimize a code to the level at which any changes can be accurately measured. A model which claims to assist in the optimization of codes can only offer optimizations to the extent it shows divergence from this baseline.
 
 }
-\fragment{The unknown quantities in our simplified power equations can be empirically measured.}
-Baseline against which to compare the work of others. 
+
+
+\fragment{The unknown quantities in our simplified power equations can be empirically measured. \todo{Occam's razor - stronger than regression if not out performed by it}}
+
 
 
 \fragment{Accuracy figures without context are notoriously unreliable. To compensate for this we compare the outputs of various models against a baseline we have devised. This baseline consists of what we regard as the simplest non-trivial power model conceivable. This model stands in as a sort of null hypothesis test, our justification being that a complex model only adds value to the extent with which it outperforms this toy model.}
@@ -136,7 +144,7 @@ presented previously with appropriate constants substituted \todo{sampled}. We p
 \begin{figure}
 \label{fig:dummy_model}
 \includegraphics[width=0.9\linewidth]{./Plots/dummy_model/dummymodel-figure0.pdf}
-\caption{Feasible Power Envelope}
+\caption{Feasible Performance Envelope}
 \end{figure}
 
 \todo{Decompose the model - find baseline vs non-baseline components}
