@@ -3,13 +3,15 @@
 
 We consider two related issues in the practical component of our work. The first task is to establish bounds on how much CPU power draw can vary whilst running arbitrary code. This allows us to place an upper limit on how much is possible to optimize a given code by. These bounds also help us tackle a second issue - namely to provide an objective appraisal of the power models proposed elsewhere in the literature.
 
-The only relevant property an engineer can influence while optimizing software for reduced power consumption is activity factor. As previously discussed, the activity factor of a processor has a linear relationship with dynamic power and secondary non-linear relationships with both static and dynamic power. A developer wishing to save energy should therefore aim to modify their code to reduce its contribution to activity factor.
+As previously mentioned, the only property an engineer can influence while optimizing software for reduced power consumption is processor activity factor. As previously discussed, the activity factor of a processor has a linear relationship with dynamic power and secondary non-linear relationships with both static and dynamic power. A developer wishing to save energy should therefore aim to modify their code to reduce its contribution to activity factor.
 
-Although activity factor is defined as a scalar between zero and one, we know that in practice its range will be more limited. Many logic elements are dedicated to unavoidable tasks which involve frequent state changes, the most obvious being the propagation of clock signals. Conversely, we know that processors are not able to keep all their functional units active simultaneously. We therefore define the range of values that activity factor can feasibly take whilst running a code as $[\alpha  .. \beta]$ where $0 < \alpha < \beta < 1$.
+Although activity factor is defined as a scalar between zero and one, we know that in practice its range will be more limited.  Many logic elements are dedicated to unavoidable tasks which involve frequent state changes, like instruction decoding or clock signalling.This means there will always be some non-zero lower limit to activity factor whilst a processor is active which we label $\alpha$.
+
+Conversely, we know that there is no situation in which any processor will toggle the state of each transistor at every clock signal. Current processors are not physically able to keep all their functional units active simultaneously, which means our upper bound $\beta$ will be significantly lower than unity. More generally we know that any system which toggles every transistor with probability 1 is not capable of performing meaningful computation. We therefore define the range of values that activity factor can feasibly take whilst running a code as $[\alpha  .. \beta]$ where $0 < \alpha < \beta < 1$.
 
 From equations \ref{eq:totpwr}-\ref{eq:leakpwr} we know that, for a fixed platform and temperature, activity factors $\alpha$ and $\beta$ will be associated with constant power draws $P_{\alpha}$ and $P_{\beta}$ respectively, where $P_{\alpha} < P_{\beta}$. The values of these terms are naturally system-dependent and should be determined empirically. 
 
-We are now ready to derive our visual heuristic to guide optimization. We begin by plotting lines with gradients $P_{\alpha}$ and $P_{\beta}$ in \figurename~\ref{fig:pow} to establish a feasible performance envelope. This represents the set of all $(P_{opt}, t_{opt})$ pairs for which $P_{\alpha}~<~P_{opt}~<~P_{\beta}$, with no bounds placed on runtime, $t_{opt}$. It should be clear that all codes,  and by extension their maximally-optimized equivalents, must be represented somewhere within this envelope.
+We are now ready to derive a visual heuristic to guide optimization. We begin by plotting lines with gradients $P_{\alpha}$ and $P_{\beta}$ in \figurename~\ref{fig:pow} to establish a feasible performance envelope. This represents the set of all $(P_{opt}, t_{opt})$ pairs for which $P_{\alpha}~<~P_{opt}~<~P_{\beta}$, with no bounds placed on runtime, $t_{opt}$. It should be clear that all codes,  and by extension their maximally-optimized equivalents, must be represented somewhere within this envelope.
 
 \begin{figure}[ht]                                                               
 \centering                                                                      
@@ -20,21 +22,37 @@ We are now ready to derive our visual heuristic to guide optimization. We begin 
 \label{fig:nopjmpres}                                                           
 \end{figure}  
 
-We approximate $P_{\alpha}$ by monitoring the power consumed whilst running the code given in \figurename~\ref{fig:nopjmpres}, which effectively performs no work. It is safe to assume that this benchmark has a lower activity factor than a non-trivial code on any reasonable platform. We defer measurement of $P_{\beta}$ for now as its precise value is not relevant to the current discussion.
+We approximate $P_{\alpha}$ by monitoring the power consumed whilst running the code given in \figurename~\ref{fig:nopjmpres}. This code performs the least amount of work possible whilst keeping the processor active. It consists of a single instruction, performs no computation and places no demand on the memory subsystems. It is therefore safe to assume that any non-trivial code running on a realistic platform has a higher activity factor than this minimal benchmark. We defer measurement of $P_{\beta}$ for now as its precise value is not relevant to the current discussion.
 
-To constrain our search further we consider the metric we wish to reduce. We know that for two logically equivalent codes $a$ and $b$, the transformation $a \to b$ is a valid optimization with respect to a cost metric $M$ if and only if $M(a) > M(b)$. We plot the curve linking all points $b$ within our envelope where $M(a) = M(b)$. By definition, any valid optimization can only exist below this line. The exact equation of this curve varies depending on $M$, but can be found through basic algebra. For $ED^{2}P$ we get $y = (P_{a} \times t_{a}^{3}) / x^2$
+To constrain our search further we consider the metric we wish to reduce. We know that for two logically equivalent codes $a$ and $b$, the transformation $a \to b$ is a valid optimization with respect to a cost metric $M$ if and only if $M(a) > M(b)$. We plot the curve linking all points $b$ within our envelope where $M(a) = M(b)$. By definition, any valid optimization can only exist below this line. The exact equation of this curve depends on the metric chosen and can be found with basic algebra. We derive the bound for $ED^2P$ below:
 
-Our final bound considers what it means to optimize code for reduced power draw. Our definition should be flexible enough to include optimizations which deliver significant reductions in power draw with minuscule reductions in runtime. On the other hand, we must avoid being too lenient. A large reduction in runtime associated with a negligible reduction in power draw should be regarded as a classical optimization.
+\begin{align}
+ED^2P(a) &= ED^2P(b) \nonumber \\
+\implies P_{a} \times T_{a}^{3} &= P_{b} \times T_{b}^{3} \nonumber & \text{(by \ref{eq:edp})}\\
+\implies P_{b} &= \frac{P_{a} \times T_{a}^{3}}{T_{b}^3} \nonumber \\
+\implies E_{b} &= \frac{P_{a} \times T_{a}^{3}}{T_{b}^2}
+\end{align}
 
-Although this distinction may seem somewhat academic, it is an important consideration when searching for optimizations. In general, when the performance penalty is bigger in one domain than the other then intuitively the tools and techniques developed for that domain are better suited to finding the optimization.
+Our final bound considers what it means to optimize code for reduced power draw. We must avoid being too lenient; a large reduction in runtime associated with a negligible reduction in power draw should still be regarded as a classical optimization. On the other hand, our definition should include optimizations which deliver significant reductions in power draw with minuscule reductions in runtime. 
+
+
+The definition we have settled on is that the transformation $a \to b$ is a valid power optimization w.r.t a metric $M$ if it is a valid optimization w.r.t. $M$ and the reduction in power draw has a greater impact on improvement in $M$ than any reduction in runtime. We plot the curve where both two factors have equal effects. All valid power optimizations must lie below this bound. Once again the precise equation for this bound depends on the metric chosen. We present the derivation for $M = ED^{2}P$ by way of example:
+
+\begin{align}
+ED^2P(a) &= ED^2P(b) \nonumber \\
+\implies P_{a} \times T_{a}^{3} &= P_{b} \times T_{b}^{3} \nonumber & \text{(by \ref{eq:edp})}\\
+\implies P_{b} &= \frac{P_{a} \times T_{a}^{3}}{T_{b}^3} \nonumber \\
+\implies E_{b} &= \frac{P_{a} \times T_{a}^{3}}{T_{b}^2}
+\end{align}
+
+% All else being equal, energy to solution will reduce if a code can be made to run faster. That said, there is a clear difference between an optimization which specifically targets energy efficiency and this inevitable side-effect of classical optimization.
+It may seem somewhat academic to base this bound on our definition of power optimization. That said, it is a valid and important consideration when searching for optimizations. In general, when the performance penalty is bigger in one domain than the other then intuitively the tools and techniques developed for that domain are better suited to finding the optimization.
 \begin{figure}
 \input{./Plots/model_drawing/sample}
 \caption{Optimization Classifications}\label{fig:pow}
 \end{figure}
 
-% All else being equal, energy to solution will reduce if a code can be made to run faster. That said, there is a clear difference between an optimization which specifically targets energy efficiency and this inevitable side-effect of classical optimization.
 
-The definition we have settled on is that the transformation $a \to b$ is a valid power optimization w.r.t a metric $M$ if it is a valid optimization w.r.t. $M$ and the reduction in power draw has a greater impact on improvement in $M$ than any reduction in runtime. Once again, we plot the curve where both two factors have equal effects. All valid power optimizations must lie below this bound.
 
 By plotting the various limits described above we subdivide the performance envelope into three distinct areas corresponding to power optimizations, time optimizations and degraded performance. For the purposes of illustration we add lines of constant time and energy allowing us to subdivide the plot further into the areas labelled:
 \begin{enumerate}
