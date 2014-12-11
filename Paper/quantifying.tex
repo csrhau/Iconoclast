@@ -70,8 +70,9 @@ Only three measurements are required to build this plot; the system's baseline p
 
 Despite its simplicity, this technique offers a surprising wealth of information. The vertical distance between $\theta$ and intercept $B$ places an upper limit on the absolute amount of energy which can be saved by power optimization alone. The value $M(\theta) / M(A)$ bounds the amount of improvement in our metric we can expect to see from power optimization. The difference in runtime between intersect $C$ and $\theta$ represents the amount of time we are able to trade off if we hope to achieve a slower yet more energy efficient code. Finally, the value $D(\theta) / D(A)$ represents the smallest speed-up which delivers more benefit than power optimization is capable of.
 
+At this point it is worth stating explicitly that our heuristic is a general one. Its only requirements are that power consumption is proportional to activity factor and that energy and time figures can be obtained for the system baseline and the code under investigation. As such it can be applied equally well at scales ranging from a single core to an entire system. We focus on CPU power consumption simply because measurements are relatively easy to obtain at this level.
 
-Having derived our heuristic we set out to apply it to a number of HPC benchmarks. Our first task was to measure the $P_\alpha$ baseline for our test system. This machine incorporates a commodity Intel Ivy Bridge processor which exposes the Running Average Power Limit interface \cite{david:2010aa}. For this reason we chose to use the techniques outlined in \cite{hackenberg:2013aa} to perform our measurements. It is worth noting at this point that our method does not rely on any particular hardware or measurement configurations. The only prerequisites are that the system under test is CMOS-based and accurate power and time measurements are available.
+We set out to apply our technique to a number of HPC benchmarks. Our first task was to measure the $P_\alpha$ baseline for our test system. This machine incorporates a commodity Intel Ivy Bridge processor which exposes the Running Average Power Limit interface \cite{david:2010aa}. For this reason we chose to use the techniques outlined in \cite{hackenberg:2013aa} to perform our measurements. This choice was made primarily out of convenience, as our method does not rely on any particular hardware or measurement configurations. The only prerequisites are that the system under test is CMOS-based and accurate power and time measurements are available.
 
 \begin{table}
 \centering
@@ -101,19 +102,19 @@ Frequency (GHz) & 1 & 2 & 3 & 4 \\ \midrule
 \label{tab:baseline}
 \end{table} 
 
-We measured CPU power draw whilst running our baseline micro-benchmark for each combination of core count and frequency supported by the hardware. The results of this investigation are given in Table \ref{tab:baseline}. We then ran a range of codes from common benchmarking suites, targeting various core counts and system configurations. A small number of results from the Rodinia suite is presented in Table \ref{tab:coderesults}. These results come from runs which were configured to use the maximum frequency and core count possible. Our baseline power draw for this configuration is 29.857 Watts.
+We measured CPU power draw whilst running our baseline micro-benchmark for each combination of core count and frequency which was supported by the hardware of our test platform. The results of this investigation are given in Table \ref{tab:baseline}. We then ran a range of codes chosen from common benchmarking suites, targeting various core counts and system configurations. A small number of results from the Rodinia suite is presented in Table \ref{tab:coderesults}. These results come from runs which were configured to use the maximum frequency and core count possible. Our baseline power draw for this configuration is 29.857 Watts.
 
 
 \begin{table}
 \centering
 \small
-\begin{tabular}{@{}cccc@{}} \toprule
-Code & Runtime (s) & Energy (J) & Power (W) \\ \midrule 
-CFD & 29.72 & 933.32 & 31.40  \\ 
-Heartwall & 24.62 & 787.17 & 31.97 \\ 
-lavaMD & 66.18 & 2142.65 & 32.38 \\ 
-leukocyte &  38.92 & 1197.91 & 30.78 \\ 
-streamcluster & 33.86 & 1086.77 & 32.10 \\ 
+\begin{tabular}{@{}ccccc@{}} \toprule
+Code & Runtime (s) & Energy (J) & Power (W) & $ED^2P$ \\ \midrule 
+CFD & 29.72 & 933.32 & 31.40 & 824381  \\ 
+Heartwall & 24.62 & 787.17 & 31.97 & 477139 \\ 
+lavaMD & 66.18 & 2142.65 & 32.38 & 9384362\\ 
+leukocyte &  38.92 & 1197.91 & 30.78 & 1814554 \\ 
+streamcluster & 33.86 & 1086.77 & 32.10 & 1245981 \\ 
 \bottomrule
 \end{tabular}
    \vspace{0.5\baselineskip}
@@ -121,27 +122,26 @@ streamcluster & 33.86 & 1086.77 & 32.10 \\
 \label{tab:coderesults}
 \end{table} 
 
-Of the codes listed above, lavaMD is the strongest candidate for optimization as it has both the highest power draw at 32.38 Watts and the longest runtime of 66.18 seconds. Naturally, we applied our heuristic to determine just how much scope for power optimization this code offers, as displayed by \figurename~\todo{plotme}
+Of the codes listed above, lavaMD is the strongest candidate for optimization as it has both the highest power draw at 32.38 Watts and the longest runtime of 66.18s. Applying our heuristic to this code yields the optimization space shown in \figurename~\ref{fig:lavamd} and described below.
 
+
+\begin{figure}
+\input{./Plots/lavamd_model/plot_core}
+\caption{Power Heuristic for Rodinia lavaMD} \label{fig:lavamd}
+\end{figure}
+
+If we assume it is somehow possible to reduce the activity factor of lavaMD to match that of our  micro-benchmark which performs no work, then the corresponding energy savings at point B would amount to 166.71 Joules, a $7.8\%$ reduction. This corresponds to an improvement in $ED^2P$ of $1.08\times$ from 9384362 to 8654190. Point A represents the most extreme case; reducing activity factor to the minimum possible whilst also significantly speeding up our code. This scenario yields an $ED^2P$ of 7979856, a $1.17\times$ improvement.
+
+For lavaMD, the longest runtime within our optimization envelope is 69.99s. This means that any power optimization which seeks to trade increased runtime for improved energy efficiency can slow lavaMD down by at most 1.81s before $ED^2P$ becomes strictly worse. Furthermore, we know the fastest out code can run whilst remaining in our envelope is 64.41s. This means that a classical optimization which reduces runtime by 1.77s or more is strictly better than all valid power optimizations at minimizing $ED^2P$. A modest $1.03 \times$ speed-up from classical optimization yields more benefit than any power optimization ever could.
+
+
+If a performance engineer decides the benefits of power optimization are worth pursuing after applying the test outlined above, the question still remains as to how he should go about searching for those optimizations. 
 
 \todo{working point}
 
 
-\begin{figure}
-\label{fig:modelpoints}
-\input{./Plots/optimization_teepee/teepee_core}
-\caption{Power Heuristic for Rodinia CFD}
-\end{figure}
-
-	
-	
 
 We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
-
-
-\fragment{this tent shaped region}
-\fragment{Despite its simplicity, this simple model provides us with lots of information. \todo{biggest gain to be had by using power vs classical optimization, energy reduction possible through power optimization ignoring any runtime effects, the maximum amount of time we can trade for any gains in energy efficiency, and a convenient way of comparing different codes}}
-
 
 
 
@@ -168,16 +168,6 @@ It is also worth noting that this model is effectively useless from a code optim
 
 
 
-\fragment{Two components to our investigation. Firstly, the upper bound imposed by the baseline power consumption. Secondly, as we can only view power figures approximately, the error introduced into these models necessarily limits their usefulness as optimization tools beyond a certain point.}
-
-
-
-
-
-
-
-\todo{table 2 - micro-benchmark results. Linpack is 35.2428 for 100 seconds}
-\todo{Something about how any delta is about how the code uses more logic elements than our NOP lo ops. Our optimization window is therefore within that Delta}
 
 \todo{Be nice, say that this does not invalidate other work, but simply shows that hardware has now reached \reword{convergence} and basically there's little traction left}
 
@@ -202,10 +192,6 @@ presented previously with appropriate constants substituted \todo{sampled}. We p
 
 \fragment{Either optimizations which are off the critical path, or else those which are on the critical path }
 
-\fragment{Put another way, any optimization which trades runtime for power has a limited window of}
-
-\todo{equationify fact that energy is power * time, and assume we have power decreases, time static or increases}
-\todo{equationify baseline lt optimized lt unoptimized lt roofline} \todo{note - roofline is tdp max}
 
 \todo{Do maths think - by what margin would power have to go down to justify longer runtime? ratio of cost per watt, amortized cost per second}
 
