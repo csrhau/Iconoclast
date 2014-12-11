@@ -23,14 +23,11 @@
     \addlegendentry{$P_{\beta}$ Energy Bound}
 
     %ED2P boundaries
-    \addlegendentry{Optimization Limits} 
 
-    \addplot[domain=27.25680:34.34143, gray, forget plot] { (\power * \seconds^3) / ((x)^2)};
-    \addplot[domain=26.2074:\seconds, gray] { (\power / \seconds^3) * x^4}; % Power time same ratio
-
-    \addlegendimage{only marks, mark=o}
-    \addlegendentry{Unoptimized code}
-
+    \addplot[domain=27.25680:34.34143, orange] { (\power * \seconds^3) / ((x)^2)};
+    \addlegendentry{$ED^2P$ Optimization Bound} 
+    \addplot[domain=26.2074:\seconds, green] { (\power / \seconds^3) * x^4}; % Power time same ratio
+    \addlegendentry{$ED^2P$ Contribution Bound} 
 
     \addplot[domain=\pgfkeysvalueof{/pgfplots/xmin}:\seconds, dashed] {\power * x};
     \draw[dashed] ({axis cs:\seconds,0}|-{axis cs:0,\baseenergy}) -- ({axis cs:\seconds,0}|-{axis cs:0,\energy});

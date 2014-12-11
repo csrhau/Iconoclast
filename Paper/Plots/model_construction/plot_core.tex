@@ -1,0 +1,76 @@
+ 
+\begin{tikzpicture}
+  \begin{axis}[ticks = none, 
+    axis x line=bottom,axis y line=left,
+ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
+    ymin=0, ymax=2550,
+    xmin=0, xmax=35,
+    width=\linewidth,
+    legend style={legend pos=north west}
+    ]
+
+    %% Model Parameters %%
+    \pgfmathsetmacro{\baselinepower}{30} % NOP code
+    \pgfmathsetmacro{\rooflinepower}{60}
+    \pgfmathsetmacro{\codepower}{(\baselinepower + \rooflinepower) / 2}
+    \pgfmathsetmacro{\codetime}{30}
+    % Sadly, pgfplots sucks too much to calculate cube roots
+    \pgfmathsetmacro{\anodex}{26.20741}
+    \pgfmathsetmacro{\cnodex}{34.34143}
+    \pgfmathsetmacro{\tnodex}{27.25681}
+
+    %% Intermezzo Values %%
+    \pgfmathsetmacro{\codeenergy}{\codepower * \codetime}
+    \pgfmathsetmacro{\baselineenergy}{\baselinepower * \codetime}
+    \pgfmathsetmacro{\rooflineenergy}{\rooflinepower * \codetime}
+    \pgfmathsetmacro{\lowdisplayline}{(2 * \baselinepower + \codepower) / 3}
+    \pgfmathsetmacro{\highdisplayline}{(1 * \rooflinepower + 1 * \codepower) / 2}
+
+    % arguments: code power, code time, x - todo, apparently not supposed to do pgfmathparse
+    \pgfmathdeclarefunction{metricbound}{3}{%
+      \pgfmathparse{((#1 * #2^3) / #3^2)}%
+    }
+    \pgfmathdeclarefunction{definitionbound}{3}{%
+      \pgfmathparse{((#1 / #2^3) * #3^4)}%
+    }
+     \pgfmathdeclarefunction{optimizationlimits}{3}{%
+      \pgfmathparse{(min(metricbound(#1, #2, #3), definitionbound(#1, #2, #3)))}
+    }
+
+    % ALPHA BASELINE BOUND 
+    \addplot[domain=\pgfkeysvalueof{/pgfplots/xmin}:\pgfkeysvalueof{/pgfplots/xmax},
+             blue] {\baselinepower * x};
+    \addlegendentry{$P_{\alpha}$ Energy Bound} 
+    % BETA ROOFLINE BOUND
+    \addplot[domain=\pgfkeysvalueof{/pgfplots/xmin}:\pgfkeysvalueof{/pgfplots/xmax},
+             red] {\rooflinepower * x};
+    \addlegendentry{$P_{\beta}$ Energy Bound} 
+
+    % Constant Time and Power Dashes
+    \draw[darkgray, dashed] ({axis cs:\codetime,\baselineenergy}) -- ({axis cs:\codetime,\codeenergy});
+    \draw[dashed] ({axis cs:\pgfkeysvalueof{/pgfplots/xmin},\pgfkeysvalueof{/pgfplots/ymin}}) -- ({axis cs:\codetime,\codeenergy});
+ 
+
+    \addplot[domain=\tnodex:\cnodex, orange] { metricbound(\codepower, \codetime, x)};
+    \addlegendentry{$ED^{2}P$ Optimization Bound}
+
+    \addplot[domain=\anodex:\codetime, green] { definitionbound(\codepower, \codetime, x)};
+    \addlegendentry{$ED^{2}P$ Contribution Bound}
+
+
+    \node[circle,fill,inner sep=2pt] at (axis cs:\codetime,\codeenergy) {};
+    \node[above right] at (axis cs:\codetime,\codeenergy) {$\theta$};
+    \node at (axis cs:31.4,\lowdisplayline*31.4) {\textit1.};
+    \node at (axis cs:29.1,\lowdisplayline*29.1) {\textit2.};
+    \node at (axis cs:24.5,\lowdisplayline*24.5) {\textit3.};
+    \node at (axis cs:24.5,\highdisplayline*24.5) {\textit4.};
+    \node at (axis cs:33,\highdisplayline*33) {\textit5.};
+    
+    \node [below] at ({axis cs:\anodex, \anodex*\baselinepower}) {A};
+    \node [below] at ({axis cs:\codetime,\baselineenergy}) {B};
+    \node [below] at ({axis cs:\cnodex, \cnodex*\baselinepower}) {C};
+    %\node [below, name intersections={of=metric bound and baseline}] at (intersection-1) {C};
+
+
+ \end{axis}
+\end{tikzpicture}

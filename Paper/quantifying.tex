@@ -11,51 +11,54 @@ Conversely, we know that there is no situation in which any processor will toggl
 
 From equations \ref{eq:totpwr}-\ref{eq:leakpwr} we know that, for a fixed platform and temperature, activity factors $\alpha$ and $\beta$ will be associated with constant power draws $P_{\alpha}$ and $P_{\beta}$ respectively, where $P_{\alpha} < P_{\beta}$. The values of these terms are naturally system-dependent and should be determined empirically. 
 
-We are now ready to derive a visual heuristic to guide optimization. We begin by plotting lines with gradients $P_{\alpha}$ and $P_{\beta}$ in \figurename~\ref{fig:pow} to establish a feasible performance envelope. This represents the set of all $(P_{opt}, t_{opt})$ pairs for which $P_{\alpha}~<~P_{opt}~<~P_{\beta}$, with no bounds placed on runtime, $t_{opt}$. It should be clear that all codes,  and by extension their maximally-optimized equivalents, must be represented somewhere within this envelope.
+We are now ready to derive a visual heuristic to guide optimization. We begin by plotting lines with gradients $P_{\alpha}$ and $P_{\beta}$ in \figurename~\ref{fig:modeldraw} to establish a feasible performance envelope. This represents the set of all $(E_\theta, D_\theta)$ pairs for which $P_{\alpha}~<~P_\theta~<~P_{\beta}$, with no bounds placed on runtime, $D_\theta$. It should be clear that all codes,  and by extension their maximally-optimized equivalents, must be represented somewhere within this envelope. We also plot the point which corresponds to our original as $\theta$.
 
 \begin{figure}[ht]                                                               
 \centering                                                                      
 \lstset{basicstyle=\ttfamily\footnotesize\bfseries,                             
       frame=tb}                                                                 
 \lstinputlisting[]{Listings/nops.c}                             
-\caption{Baseline Power Benchmark}                            
-\label{fig:nopjmpres}                                                           
+\caption{Baseline Power Micro-Benchmark}                            
+\label{fig:microbench}                                                           
 \end{figure}  
 
-We approximate $P_{\alpha}$ by monitoring the power consumed whilst running the code given in \figurename~\ref{fig:nopjmpres}. This code performs the least amount of work possible whilst keeping the processor active. It consists of a single instruction, performs no computation and places no demand on the memory subsystems. It is therefore safe to assume that any non-trivial code running on a realistic platform has a higher activity factor than this minimal benchmark. We defer measurement of $P_{\beta}$ for now as its precise value is not relevant to the current discussion.
+We approximate $P_{\alpha}$ by monitoring the power consumed whilst running an architecture-specific version of the code given in \figurename~\ref{fig:microbench}. This code performs the least amount of work possible whilst keeping the processor active. It consists of a single instruction, performs no computation and places no demand on the memory subsystems. It is therefore safe to assume that any non-trivial code running on a realistic platform has a higher activity factor than this minimal micro-benchmark. We defer measurement of $P_{\beta}$ for now as its precise value is not relevant to the current discussion.
 
-To constrain our search further we consider the metric we wish to reduce. We know that for two logically equivalent codes $a$ and $b$, the transformation $a \to b$ is a valid optimization with respect to a cost metric $M$ if and only if $M(a) > M(b)$. We plot the curve linking all points $b$ within our envelope where $M(a) = M(b)$. By definition, any valid optimization can only exist below this line. The exact equation of this curve depends on the metric chosen and can be found with basic algebra. We derive the bound for $ED^2P$ below:
+
+To constrain our search further we consider the metric we wish to reduce. We know that for two logically equivalent codes $\theta$ and $\lambda$, the transformation $\theta \to \lambda$ is a valid optimization with respect to a cost metric $M$ if and only if $M(\lambda) < M(\theta)$. If we plot the curve linking all points having $M(\lambda) = M(\theta)$, then by definition any optimized versions of $\theta$ can only exist below this line. The exact equation of the curve depends on the metric chosen. We derive the bound for $ED^2P$ below:
 
 \begin{align}
-ED^2P(a) &= ED^2P(b) \nonumber \\
-\implies P_{a} \times T_{a}^{3} &= P_{b} \times T_{b}^{3} \nonumber & \text{(by \ref{eq:edp})}\\
-\implies P_{b} &= \frac{P_{a} \times T_{a}^{3}}{T_{b}^3} \nonumber \\
-\implies E_{b} &= \frac{P_{a} \times T_{a}^{3}}{T_{b}^2}
+ED^2P(\theta) &= ED^2P(\lambda) \nonumber \\
+\Leftrightarrow P_{\theta} \times {D_{\theta}}^{3} &= P_{\lambda} \times {D_{\lambda}}^{3} \nonumber \\
+\implies P_{\lambda} &= \frac{P_{\theta} \times {D_{\theta}}^{3}}{{D_{\lambda}}^3} \nonumber \\
+\implies E_{\lambda} &= \frac{P_{\theta} \times {D_{\theta}}^{3}}{{D_{\lambda}}^2}
 \end{align}
 
 Our final bound considers what it means to optimize code for reduced power draw. We must avoid being too lenient; a large reduction in runtime associated with a negligible reduction in power draw should still be regarded as a classical optimization. On the other hand, our definition should include optimizations which deliver significant reductions in power draw with minuscule reductions in runtime. 
 
-
-The definition we have settled on is that the transformation $a \to b$ is a valid power optimization w.r.t a metric $M$ if it is a valid optimization w.r.t. $M$ and the reduction in power draw has a greater impact on improvement in $M$ than any reduction in runtime. We plot the curve where both two factors have equal effects. All valid power optimizations must lie below this bound. Once again the precise equation for this bound depends on the metric chosen. We present the derivation for $M = ED^{2}P$ by way of example:
+The definition we have settled on is that an optimization $\theta \to \lambda$ is a power optimization with respect to metric $M$ if the change in power draw it delivers is responsible for the majority of the reduction in $M$. Conversely, if the primary benefit of an optimization comes from improved runtime then it is to be considered a runtime optimization. We plot a curve linking those points which have the same ratio of contributions from both power and runtime factors to $M$ as our original code. All valid power optimizations must lie below this so-called contribution bound. Once again the equation for this bound depends on the metric chosen, so we present the derivation for $ED^{2}P$ by way of example:
 
 \begin{align}
-ED^2P(a) &= ED^2P(b) \nonumber \\
-\implies P_{a} \times T_{a}^{3} &= P_{b} \times T_{b}^{3} \nonumber & \text{(by \ref{eq:edp})}\\
-\implies P_{b} &= \frac{P_{a} \times T_{a}^{3}}{T_{b}^3} \nonumber \\
-\implies E_{b} &= \frac{P_{a} \times T_{a}^{3}}{T_{b}^2}
+\frac{P_{\theta}}{{D_{\theta}}^3} &= \frac{P_{\theta^\prime}}{{D_{\theta^\prime}}^3}\\ 
+\implies P_{\lambda} &= \frac{P_{\theta}}{{D_{\theta}}^3} \times {D_{\lambda}}^3 \nonumber \\
+\implies E_{\lambda} &= \frac{P_{\theta}}{{D_{\theta}}^3} \times {D_{\lambda}}^4
 \end{align}
 
+
 % All else being equal, energy to solution will reduce if a code can be made to run faster. That said, there is a clear difference between an optimization which specifically targets energy efficiency and this inevitable side-effect of classical optimization.
-It may seem somewhat academic to base this bound on our definition of power optimization. That said, it is a valid and important consideration when searching for optimizations. In general, when the performance penalty is bigger in one domain than the other then intuitively the tools and techniques developed for that domain are better suited to finding the optimization.
+At first it may appear somewhat academic to base a model on the definition of power optimization. That said, this is an important consideration in practice. Intuitively it makes sense to use the most appropriate tools while searching for optimizations. If code is sub-optimal and the penalty is felt more in one domain than the other then the tools and techniques developed for that domain are better suited to finding the optimization.
+
+
 \begin{figure}
-\input{./Plots/model_drawing/sample}
-\caption{Optimization Classifications}\label{fig:pow}
+\input{./Plots/model_construction/plot_core}
+\caption{Code Optimization Space}\label{fig:modeldraw}
 \end{figure}
 
 
+The bounds presented above allow us to identify the area in the Energy/Runtime plane where power-optimized versions of a given code may exist. For the purposes of illustration we add lines of fixed time and power draw based on our initial code measurement. This allows us to subdivide \figurename~\ref{fig:modeldraw} into those areas labelled:
 
-By plotting the various limits described above we subdivide the performance envelope into three distinct areas corresponding to power optimizations, time optimizations and degraded performance. For the purposes of illustration we add lines of constant time and energy allowing us to subdivide the plot further into the areas labelled:
 \begin{enumerate}
+\centering
 \item Power-only optimizations
 \item Power-mostly optimizations
 \item Time-mostly optimizations
@@ -63,9 +66,65 @@ By plotting the various limits described above we subdivide the performance enve
 \item Code degradation
 \end{enumerate}
 
-Between them, areas 1 and 2 represent the section of the performance envelope within which power optimization tools are most capable of identifying potential optimizations. Conventional tools should be used when trying to identify optimizations outside this area. The only parameters required to delineate this space for a given code are values for its runtime and energy costs and knowledge of system baseline power.
+Only three measurements are required to build this plot; the system's baseline power draw, $P_\alpha$, and the time and energy to solution for the code to be optimized, $D_\theta$ and $E_\theta$ respectively. We can ignore the value of $P_\beta$ when optimizing for power draw as we need not consider any values greater than our initial $P_\theta$.
 
-Despite its simplicity, this technique offers a surprising wealth of information. Figure \ref{fig:modelpoints} shows the power optimization area we observed when we ran the CFD benchmark of the Rodinia benchmark suite.
+Despite its simplicity, this technique offers a surprising wealth of information. The vertical distance between $\theta$ and intercept $B$ places an upper limit on the absolute amount of energy which can be saved by power optimization alone. The value $M(\theta) / M(A)$ bounds the amount of improvement in our metric we can expect to see from power optimization. The difference in runtime between intersect $C$ and $\theta$ represents the amount of time we are able to trade off if we hope to achieve a slower yet more energy efficient code. Finally, the value $D(\theta) / D(A)$ represents the smallest speed-up which delivers more benefit than power optimization is capable of.
+
+
+Having derived our heuristic we set out to apply it to a number of HPC benchmarks. Our first task was to measure the $P_\alpha$ baseline for our test system. This machine incorporates a commodity Intel Ivy Bridge processor which exposes the Running Average Power Limit interface \cite{david:2010aa}. For this reason we chose to use the techniques outlined in \cite{hackenberg:2013aa} to perform our measurements. It is worth noting at this point that our method does not rely on any particular hardware or measurement configurations. The only prerequisites are that the system under test is CMOS-based and accurate power and time measurements are available.
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{@{}ccccc@{}} \toprule
+&\multicolumn{4}{c}{CPU Cores Active} \\ \cmidrule(r){2-5}
+Frequency (GHz) & 1 & 2 & 3 & 4 \\ \midrule 
+1.60 & 9.180 & 10.970 & 12.832 & 14.555 \\ 
+1.70 & 9.449 & 11.446 & 13.295 & 15.112 \\ 
+1.80 & 9.592 & 11.654 & 13.617 & 15.682 \\ 
+1.90 & 9.816 & 12.009 & 14.168 & 16.291 \\ 
+2.10 & 10.272 & 12.709 & 15.161 & 17.605 \\ 
+2.20 & 10.559 & 13.161 & 15.705 & 18.333 \\ 
+2.30 & 10.812 & 13.551 & 16.419 & 19.070 \\ 
+2.40 & 11.303 & 14.290 & 17.012 & 19.946 \\ 
+2.50 & 11.680 & 14.784 & 18.000 & 20.837 \\ 
+2.60 & 11.819 & 15.144 & 18.616 & 21.879 \\ 
+2.70 & 12.205 & 15.830 & 19.379 & 22.940 \\ 
+2.90 & 13.095 & 17.196 & 21.155 & 25.344 \\ 
+3.00 & 13.547 & 18.160 & 22.210 & 26.759 \\ 
+3.10 & 14.048 & 18.870 & 23.639 & 28.284 \\ 
+3.20 & 14.504 & 19.726 & 24.940 & 29.857 \\ 
+\bottomrule
+\end{tabular}
+   \vspace{0.5\baselineskip}
+\caption{Test Platform Base CPU Power (W)}
+\label{tab:baseline}
+\end{table} 
+
+We measured CPU power draw whilst running our baseline micro-benchmark for each combination of core count and frequency supported by the hardware. The results of this investigation are given in Table \ref{tab:baseline}. We then ran a range of codes from common benchmarking suites, targeting various core counts and system configurations. A small number of results from the Rodinia suite is presented in Table \ref{tab:coderesults}. These results come from runs which were configured to use the maximum frequency and core count possible. Our baseline power draw for this configuration is 29.857 Watts.
+
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{@{}cccc@{}} \toprule
+Code & Runtime (s) & Energy (J) & Power (W) \\ \midrule 
+CFD & 29.72 & 933.32 & 31.40  \\ 
+Heartwall & 24.62 & 787.17 & 31.97 \\ 
+lavaMD & 66.18 & 2142.65 & 32.38 \\ 
+leukocyte &  38.92 & 1197.91 & 30.78 \\ 
+streamcluster & 33.86 & 1086.77 & 32.10 \\ 
+\bottomrule
+\end{tabular}
+   \vspace{0.5\baselineskip}
+\caption{Rodinia Results @ 3.2GHz, 4 Cores}
+\label{tab:coderesults}
+\end{table} 
+
+Of the codes listed above, lavaMD is the strongest candidate for optimization as it has both the highest power draw at 32.38 Watts and the longest runtime of 66.18 seconds. Naturally, we applied our heuristic to determine just how much scope for power optimization this code offers, as displayed by \figurename~\todo{plotme}
+
+
+\todo{working point}
 
 
 \begin{figure}
@@ -76,7 +135,6 @@ Despite its simplicity, this technique offers a surprising wealth of information
 
 	
 	
-\todo{Working point}
 
 We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
 
@@ -114,39 +172,11 @@ It is also worth noting that this model is effectively useless from a code optim
 
 
 
-\begin{table}
-
-
-\centering
-\small
-\begin{tabular}{@{}ccccc@{}} \toprule
-&\multicolumn{4}{c}{CPU Cores Active} \\ \cmidrule(r){2-5}
-Frequency (GHz) & 1 & 2 & 3 & 4 \\ \midrule 
-1.60 & 9.180 & 10.970 & 12.832 & 14.555 \\ 
-1.70 & 9.449 & 11.446 & 13.295 & 15.112 \\ 
-1.80 & 9.592 & 11.654 & 13.617 & 15.682 \\ 
-1.90 & 9.816 & 12.009 & 14.168 & 16.291 \\ 
-2.10 & 10.272 & 12.709 & 15.161 & 17.605 \\ 
-2.20 & 10.559 & 13.161 & 15.705 & 18.333 \\ 
-2.30 & 10.812 & 13.551 & 16.419 & 19.070 \\ 
-2.40 & 11.303 & 14.290 & 17.012 & 19.946 \\ 
-2.50 & 11.680 & 14.784 & 18.000 & 20.837 \\ 
-2.60 & 11.819 & 15.144 & 18.616 & 21.879 \\ 
-2.70 & 12.205 & 15.830 & 19.379 & 22.940 \\ 
-2.90 & 13.095 & 17.196 & 21.155 & 25.344 \\ 
-3.00 & 13.547 & 18.160 & 22.210 & 26.759 \\ 
-3.10 & 14.048 & 18.870 & 23.639 & 28.284 \\ 
-3.20 & 14.504 & 19.726 & 24.940 & 29.857 \\ 
-\bottomrule
-\end{tabular}
-   \vspace{0.5\baselineskip}
-\caption{Test Platform Base CPU Power (W)}
-\label{tab:baseline}
-\end{table} 
 
 
 
-\todo{table 2 - benchmark results. Linpack is 35.2428 for 100 seconds}
+
+\todo{table 2 - micro-benchmark results. Linpack is 35.2428 for 100 seconds}
 \todo{Something about how any delta is about how the code uses more logic elements than our NOP lo ops. Our optimization window is therefore within that Delta}
 
 \todo{Be nice, say that this does not invalidate other work, but simply shows that hardware has now reached \reword{convergence} and basically there's little traction left}
