@@ -14,7 +14,9 @@ ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
     \pgfmathsetmacro{\codetime}{66.18}
     % Sadly, pgfplots sucks too much to calculate cube roots
     \pgfmathsetmacro{\anodex}{64.4144}
+    \pgfmathsetmacro{\anodey}{\anodex * \baselinepower}
     \pgfmathsetmacro{\cnodex}{67.994}
+    \pgfmathsetmacro{\cnodey}{\cnodex * \baselinepower}
     \pgfmathsetmacro{\tnodex}{65.8}
 
     %% Intermezzo Values %%
@@ -53,9 +55,9 @@ ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
     \node[circle,fill,inner sep=2pt] at (axis cs:\codetime,\codeenergy) {};
     \node[above right] at (axis cs:\codetime,\codeenergy) {lavaMD};
     
-    \node [below] at ({axis cs:\anodex, \anodex*\baselinepower}) {A};
+    \node [below] at ({axis cs:\anodex, \anodey}) {A};
     \node [below] at ({axis cs:\codetime,\baselineenergy}) {B};
-    \node [below] at ({axis cs:\cnodex, \cnodex*\baselinepower}) {C};
+    \node [below] at ({axis cs:\cnodex, \cnodey}) {C};
 
 
  \end{axis}

@@ -1,15 +1,13 @@
 \section{Quantifying Power Optimizations}
 \label{sec:quantifying}
 
-We consider two related issues in the practical component of our work. The first task is to establish bounds on how much CPU power draw can vary whilst running arbitrary code. This allows us to place an upper limit on how much is possible to optimize a given code by. These bounds also help us tackle a second issue - namely to provide an objective appraisal of the power models proposed elsewhere in the literature.
+The practical component of this work addresses two related issues. We first establish the bounds within which CPU power draw can vary whilst running arbitrary code. This information allows us to put an upper limit on how much is possible to optimize a given code by. These bounds also help us tackle a second issue - namely to provide an objective appraisal of the power models proposed elsewhere in the literature.
 
-As previously mentioned, the only property an engineer can influence while optimizing software for reduced power consumption is processor activity factor. As previously discussed, the activity factor of a processor has a linear relationship with dynamic power and secondary non-linear relationships with both static and dynamic power. A developer wishing to save energy should therefore aim to modify their code to reduce its contribution to activity factor.
+As previously mentioned, the only property an engineer can influence while optimizing software for reduced CPU power consumption is processor activity factor. Although activity factor is defined as a scalar between zero and one, we know that in practice its range will be more limited. These limits also restrict the scope for optimization because activity factor is directly to power consumption.
 
-Although activity factor is defined as a scalar between zero and one, we know that in practice its range will be more limited.  Many logic elements are dedicated to unavoidable tasks which involve frequent state changes, like instruction decoding or clock signalling.This means there will always be some non-zero lower limit to activity factor whilst a processor is active which we label $\alpha$.
+Many logic elements are dedicated to unavoidable tasks which involve frequent state changes, like instruction decoding or clock signalling.This means there will always be some non-zero lower limit to activity factor whilst a processor is active which we label $\alpha$. Conversely, we know that there is no situation in which any processor will toggle the state of each transistor at every clock signal. Current processors are not physically able to keep all their functional units active simultaneously, which means our upper bound $\beta$ will be significantly lower than unity.
 
-Conversely, we know that there is no situation in which any processor will toggle the state of each transistor at every clock signal. Current processors are not physically able to keep all their functional units active simultaneously, which means our upper bound $\beta$ will be significantly lower than unity. More generally we know that any system which toggles every transistor with probability 1 is not capable of performing meaningful computation. We therefore define the range of values that activity factor can feasibly take whilst running a code as $[\alpha  .. \beta]$ where $0 < \alpha < \beta < 1$.
-
-From equations \ref{eq:totpwr}-\ref{eq:leakpwr} we know that, for a fixed platform and temperature, activity factors $\alpha$ and $\beta$ will be associated with constant power draws $P_{\alpha}$ and $P_{\beta}$ respectively, where $P_{\alpha} < P_{\beta}$. The values of these terms are naturally system-dependent and should be determined empirically. 
+We define the range of values that activity factor can feasibly take whilst running a code as $[\alpha  .. \beta]$ where $0 < \alpha < \beta < 1$. From equations \ref{eq:totpwr}-\ref{eq:leakpwr} we know that, for a fixed platform and temperature, activity factors $\alpha$ and $\beta$ will be associated with constant power draws $P_{\alpha}$ and $P_{\beta}$ respectively, where $P_{\alpha} < P_{\beta}$. The values of these terms are naturally system-dependent and should be determined empirically. 
 
 We are now ready to derive a visual heuristic to guide optimization. We begin by plotting lines with gradients $P_{\alpha}$ and $P_{\beta}$ in \figurename~\ref{fig:modeldraw} to establish a feasible performance envelope. This represents the set of all $(E_\theta, D_\theta)$ pairs for which $P_{\alpha}~<~P_\theta~<~P_{\beta}$, with no bounds placed on runtime, $D_\theta$. It should be clear that all codes,  and by extension their maximally-optimized equivalents, must be represented somewhere within this envelope. We also plot the point which corresponds to our original as $\theta$.
 
@@ -22,24 +20,31 @@ We are now ready to derive a visual heuristic to guide optimization. We begin by
 \label{fig:microbench}                                                           
 \end{figure}  
 
+\todo{Appropriate baseline}
 We approximate $P_{\alpha}$ by monitoring the power consumed whilst running an architecture-specific version of the code given in \figurename~\ref{fig:microbench}. This code performs the least amount of work possible whilst keeping the processor active. It consists of a single instruction, performs no computation and places no demand on the memory subsystems. It is therefore safe to assume that any non-trivial code running on a realistic platform has a higher activity factor than this minimal micro-benchmark. We defer measurement of $P_{\beta}$ for now as its precise value is not relevant to the current discussion.
 
 
-To constrain our search further we consider the metric we wish to reduce. We know that for two logically equivalent codes $\theta$ and $\lambda$, the transformation $\theta \to \lambda$ is a valid optimization with respect to a cost metric $M$ if and only if $M(\lambda) < M(\theta)$. If we plot the curve linking all points having $M(\lambda) = M(\theta)$, then by definition any optimized versions of $\theta$ can only exist below this line. The exact equation of the curve depends on the metric chosen. We derive the bound for $ED^2P$ below:
+To constrain our search further we consider the metric we wish to reduce. We know that for two logically equivalent codes $\theta$ and $\lambda$, the transformation $\theta \to \lambda$ is a valid optimization with respect to a cost metric $M$ if and only if $M(\lambda) < M(\theta)$. If we plot the curve linking all points having $M(\lambda) = M(\theta)$, then by definition any optimized versions of $\theta$ can only exist below this line. The exact equation of the curve depends on which $E^mD^n$ metric is chosen as follows:
+
+
 
 \begin{align}
-ED^2P(\theta) &= ED^2P(\lambda) \nonumber \\
-\Leftrightarrow P_{\theta} \times {D_{\theta}}^{3} &= P_{\lambda} \times {D_{\lambda}}^{3} \nonumber \\
-\implies P_{\lambda} &= \frac{P_{\theta} \times {D_{\theta}}^{3}}{{D_{\lambda}}^3} \nonumber \\
-\implies E_{\lambda} &= \frac{P_{\theta} \times {D_{\theta}}^{3}}{{D_{\lambda}}^2}
+E^mD^n(\theta) &= E^mD^n(\lambda) \nonumber \\
+\implies {E_\lambda}^m &= \frac{{E_\theta}^m{D_\theta}^n}{{D_\lambda}^n} \nonumber \\
+\implies E_\lambda &= (\frac{{E_\theta}^m{D_\theta}^n}{{D_\lambda}^n})^\frac{1}{m}
 \end{align}
+
+\todo{Stick the actual derivations before a plot}
+\begin{equation}
+ E_{\lambda} = \frac{P_{\theta} \times {D_{\theta}}^{3}}{{D_{\lambda}}^2}
+\end{equation}
 
 Our final bound considers what it means to optimize code for reduced power draw. We must avoid being too lenient; a large reduction in runtime associated with a negligible reduction in power draw should still be regarded as a classical optimization. On the other hand, our definition should include optimizations which deliver significant reductions in power draw with minuscule reductions in runtime. 
 
 The definition we have settled on is that an optimization $\theta \to \lambda$ is a power optimization with respect to metric $M$ if the change in power draw it delivers is responsible for the majority of the reduction in $M$. Conversely, if the primary benefit of an optimization comes from improved runtime then it is to be considered a runtime optimization. We plot a curve linking those points which have the same ratio of contributions from both power and runtime factors to $M$ as our original code. All valid power optimizations must lie below this so-called contribution bound. Once again the equation for this bound depends on the metric chosen, so we present the derivation for $ED^{2}P$ by way of example:
 
 \begin{align}
-\frac{P_{\theta}}{{D_{\theta}}^3} &= \frac{P_{\theta^\prime}}{{D_{\theta^\prime}}^3}\\ 
+\frac{P_{\theta}}{{D_{\theta}}^3} &= \frac{P_{\lambda}}{{D_\lambda}^3}\\ 
 \implies P_{\lambda} &= \frac{P_{\theta}}{{D_{\theta}}^3} \times {D_{\lambda}}^3 \nonumber \\
 \implies E_{\lambda} &= \frac{P_{\theta}}{{D_{\theta}}^3} \times {D_{\lambda}}^4
 \end{align}
@@ -51,7 +56,7 @@ At first it may appear somewhat academic to base a model on the definition of po
 
 \begin{figure}
 \input{./Plots/model_construction/plot_core}
-\caption{Code Optimization Space}\label{fig:modeldraw}
+\caption{$ED^2P$ Code Optimization Space}\label{fig:modeldraw}
 \end{figure}
 
 
@@ -122,7 +127,7 @@ streamcluster & 33.86 & 1086.77 & 32.10 & 1245981 \\
 \label{tab:coderesults}
 \end{table} 
 
-Of the codes listed above, lavaMD is the strongest candidate for optimization as it has both the highest power draw at 32.38 Watts and the longest runtime of 66.18s. Applying our heuristic to this code yields the optimization space shown in \figurename~\ref{fig:lavamd} and described below.
+Of the codes listed above, lavaMD is the strongest candidate for optimization as it has both the highest power draw at 32.38 Watts and the longest runtime of 66.18s. Applying our heuristic to this code yields the optimization space shown in \figurename~\ref{fig:lavamd}. This construction allows us to derive a number of additional metrics, as described below.
 
 
 \begin{figure}
@@ -130,16 +135,14 @@ Of the codes listed above, lavaMD is the strongest candidate for optimization as
 \caption{Power Heuristic for Rodinia lavaMD} \label{fig:lavamd}
 \end{figure}
 
-If we assume it is somehow possible to reduce the activity factor of lavaMD to match that of our  micro-benchmark which performs no work, then the corresponding energy savings at point B would amount to 166.71 Joules, a $7.8\%$ reduction. This corresponds to an improvement in $ED^2P$ of $1.08\times$ from 9384362 to 8654190. Point A represents the most extreme case; reducing activity factor to the minimum possible whilst also significantly speeding up our code. This scenario yields an $ED^2P$ of 7979856, a $1.17\times$ improvement.
+If we assume it is somehow possible to reduce the activity factor of lavaMD to match that of our  micro-benchmark which performs no work, then the corresponding energy savings at point B would amount to 166.71 Joules, a $7.8\%$ reduction. This corresponds to an improvement in $ED^2P$ of $1.08\times$ from 9384362 to 8654190. Point A represents the most extreme case; reducing activity factor to the minimum possible whilst also significantly speeding up our code. This scenario yields an $ED^2P$ of 7979856, an improvement of $1.17\times$.
 
-For lavaMD, the longest runtime within our optimization envelope is 69.99s. This means that any power optimization which seeks to trade increased runtime for improved energy efficiency can slow lavaMD down by at most 1.81s before $ED^2P$ becomes strictly worse. Furthermore, we know the fastest out code can run whilst remaining in our envelope is 64.41s. This means that a classical optimization which reduces runtime by 1.77s or more is strictly better than all valid power optimizations at minimizing $ED^2P$. A modest $1.03 \times$ speed-up from classical optimization yields more benefit than any power optimization ever could.
+For lavaMD, the longest runtime within our optimization envelope is 69.99s. This means that any power optimization which seeks to trade increased runtime for improved energy efficiency can slow lavaMD down by at most 1.81s before $ED^2P$ becomes strictly worse. Furthermore, we know the fastest out code can run whilst remaining in our envelope is 64.41s. This means that a classical optimization which reduces runtime by 1.77s or more is strictly better than all valid power optimizations at minimizing $ED^2P$. A modest $1.03\times$ speed-up from classical optimization yields more benefit than any power optimization ever could.
 
-
-If a performance engineer decides the benefits of power optimization are worth pursuing after applying the test outlined above, the question still remains as to how he should go about searching for those optimizations. 
-
-\todo{working point}
+The figures listed above are all upper bounds which could not be achieved in reality. The true benefits of power optimization are likely to be significantly more modest in practice. Even so, these figures are worthwhile as they allow performance engineers to make an informed decision about where best to focus their efforts. If they consider a $1.03 \times$ speed up to be more readily achievable than a significant reduction in activity factor then they can proceed to apply conventional optimizations safe in the knowledge that energy consumption will reduce regardless of whether they increase the activity factor or not. On the other hand, if no runtime improvements are forthcoming, then power optimization techniques may still be able to find improvements where traditional approaches have failed.
 
 
+If a performance engineer decides the benefits of power optimization are worth pursuing after applying the test outlined above, the question still remains as to how he should go about searching for those optimizations. Conventional tools produce a breakdown of time spent by code path by halting the target application at timed intervals and recording its state. By extension, a sampling profiler which operated in intervals of energy instead of time it would show the contribution of different code sections to total energy use.
 
 We first construct a power model in the vein of those proposed in the literature. We then try to link the predictions of our model to the power equations given previously. Essentially we are attempting to test against the null hypothesis - to show how much better or worse our regressed model is better than a naive attempt.
 

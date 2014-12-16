@@ -16,9 +16,11 @@ ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
     \pgfmathsetmacro{\codetime}{30}
     % Sadly, pgfplots sucks too much to calculate cube roots
     \pgfmathsetmacro{\anodex}{26.20741}
+    \pgfmathsetmacro{\anodey}{\anodex * \baselinepower}
     \pgfmathsetmacro{\cnodex}{34.34143}
+    \pgfmathsetmacro{\cnodey}{\cnodex * \baselinepower}
     \pgfmathsetmacro{\tnodex}{27.25681}
-
+ 
     %% Intermezzo Values %%
     \pgfmathsetmacro{\codeenergy}{\codepower * \codetime}
     \pgfmathsetmacro{\baselineenergy}{\baselinepower * \codetime}
@@ -60,15 +62,20 @@ ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
 
     \node[circle,fill,inner sep=2pt] at (axis cs:\codetime,\codeenergy) {};
     \node[above right] at (axis cs:\codetime,\codeenergy) {$\theta$};
-    \node at (axis cs:31.4,\lowdisplayline*31.4) {\textit1.};
-    \node at (axis cs:29.1,\lowdisplayline*29.1) {\textit2.};
-    \node at (axis cs:24.5,\lowdisplayline*24.5) {\textit3.};
-    \node at (axis cs:24.5,\highdisplayline*24.5) {\textit4.};
-    \node at (axis cs:33,\highdisplayline*33) {\textit5.};
+    \pgfmathsetmacro{\oneycoord}{\lowdisplayline * 31.4}
+    \node at (axis cs:31.4,\oneycoord) {\textit1.};
+    \pgfmathsetmacro{\twoycoord}{\lowdisplayline * 29.1}
+    \node at (axis cs:29.1,\twoycoord) {\textit2.};
+    \pgfmathsetmacro{\threeycoord}{\lowdisplayline * 24.5}
+    \node at (axis cs:24.5,\threeycoord) {\textit3.};
+    \pgfmathsetmacro{\fourycoord}{\highdisplayline * 24.5}
+    \node at (axis cs:24.5,\fourycoord) {\textit4.};
+    \pgfmathsetmacro{\fiveycoord}{\highdisplayline * 33}
+    \node at (axis cs:33,\fiveycoord) {\textit5.};
     
-    \node [below] at ({axis cs:\anodex, \anodex*\baselinepower}) {A};
+    \node [below] at ({axis cs:\anodex, \anodey}) {A};
     \node [below] at ({axis cs:\codetime,\baselineenergy}) {B};
-    \node [below] at ({axis cs:\cnodex, \cnodex*\baselinepower}) {C};
+    \node [below] at ({axis cs:\cnodex, \cnodey}) {C};
     %\node [below, name intersections={of=metric bound and baseline}] at (intersection-1) {C};
 
 
