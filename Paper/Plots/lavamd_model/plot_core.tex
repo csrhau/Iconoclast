@@ -45,7 +45,7 @@ ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
     \draw[darkgray, dashed] ({axis cs:\codetime,\baselineenergy}) -- ({axis cs:\codetime,\codeenergy});
  
 
-    \addplot[domain=\tnodex:\cnodex, orange] { metricbound(\codepower, \codetime, x)};
+    \addplot[domain=\codetime:\cnodex, orange] { metricbound(\codepower, \codetime, x)};
     \addlegendentry{$ED^{2}P$ Optimization Bound}
 %
     \addplot[domain=\anodex:\codetime, green] { definitionbound(\codepower, \codetime, x)};

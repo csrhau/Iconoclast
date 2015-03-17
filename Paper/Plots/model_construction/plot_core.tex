@@ -3,8 +3,8 @@
   \begin{axis}[ticks = none, 
     axis x line=bottom,axis y line=left,
 ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
-    ymin=0, ymax=2550,
-    xmin=0, xmax=35,
+    ymin=0, ymax=3000,
+    xmin=0, xmax=46,
     width=\linewidth,
     legend style={legend pos=north west}
     ]
@@ -54,10 +54,10 @@ ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
  
 
     \addplot[domain=\tnodex:\cnodex, orange] { metricbound(\codepower, \codetime, x)};
-    \addlegendentry{$ED^{2}P$ Optimization Bound}
+    \addlegendentry{Optimization Bound}
 
     \addplot[domain=\anodex:\codetime, green] { definitionbound(\codepower, \codetime, x)};
-    \addlegendentry{$ED^{2}P$ Contribution Bound}
+    \addlegendentry{Contribution Bound}
 
 
     \node[circle,fill,inner sep=2pt] at (axis cs:\codetime,\codeenergy) {};
@@ -70,8 +70,8 @@ ylabel={Energy \emph{(J)}}, xlabel={Runtime \emph{(s)}}, axis on top,
     \node at (axis cs:24.5,\threeycoord) {\textit3.};
     \pgfmathsetmacro{\fourycoord}{\highdisplayline * 24.5}
     \node at (axis cs:24.5,\fourycoord) {\textit4.};
-    \pgfmathsetmacro{\fiveycoord}{\highdisplayline * 33}
-    \node at (axis cs:33,\fiveycoord) {\textit5.};
+    \pgfmathsetmacro{\fiveycoord}{\codepower * 37}
+    \node at (axis cs:37,\fiveycoord) {\textit5.};
     
     \node [below] at ({axis cs:\anodex, \anodey}) {A};
     \node [below] at ({axis cs:\codetime,\baselineenergy}) {B};
