@@ -14,8 +14,5 @@ for FREQ in `$BASEDIR/Scripts/freq_avail.sh`; do
     sleep $DELAY
     pkill lbench
     sleep 3
-#    LD_PRELOAD=/home/sir/Dropbox/Work/Code/wattson/sleuth/bin/sleuth.so SLEUTH_OUTPUT_FILE=$(pwd)/results/freq_${FREQ}_threads_${THREADCOUNT}_ssr_64ONE.out SLEUTH_ADDITIONAL_METRICS=${KNOWNS} SLEUTH_SAMPLE_RATE=64000000 ../build/lbench -t $THREADCOUNT &
-#   sleep $DELAY
-#   kill $!
   done
 done
