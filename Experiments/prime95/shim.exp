@@ -1,0 +1,20 @@
+#!/usr/bin/expect -f
+
+set CORES [lindex $argv 0]
+set DELAY [lindex $argv 1]
+
+spawn /home/sir/Projects/benchmarks/prime95/mprime
+expect "Your choice: "
+#torture test
+send  "15\r" 
+expect "Number of torture test threads to run"
+send "$CORES\r"
+expect "Type of torture test to run"
+#Accept default
+send "\r" 
+expect "Accept the answers above"
+#Accept default
+send "\r" 
+sleep 25
+send \003
+expect "Hit enter to continue: "
