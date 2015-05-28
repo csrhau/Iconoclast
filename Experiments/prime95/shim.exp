@@ -15,6 +15,6 @@ send "\r"
 expect "Accept the answers above"
 #Accept default
 send "\r" 
-sleep 25
+sleep $DELAY
 send \003
 expect "Hit enter to continue: "
